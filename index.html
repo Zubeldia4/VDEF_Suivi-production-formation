@@ -7,7 +7,6 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f0; color: #1a1a18; min-height: 100vh; padding: 32px 24px; }
-
 .top-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
 .top-bar h2 { font-size: 17px; font-weight: 600; color: #1a1a18; flex: 1; min-width: 180px; }
 .btn { font-size: 12px; padding: 5px 13px; border-radius: 20px; border: 1px solid #d0cfc6; background: #fff; color: #6b6a63; cursor: pointer; white-space: nowrap; transition: all .15s; }
@@ -16,24 +15,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .btn-primary:hover { background: #1648c0; }
 .btn-success { background: #2d7a4f; color: #fff; border-color: #2d7a4f; font-weight: 600; }
 .btn-success:hover { background: #236040; }
-
+.btn-export { background: #fff7e0; border-color: #e9a825; color: #92621a; font-weight: 600; }
+.btn-export:hover { background: #fef3cd; }
 .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
 .filter-btn { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid #d0cfc6; background: #fff; color: #6b6a63; cursor: pointer; transition: all .15s; }
 .filter-btn:hover { background: #f0efe8; }
 .filter-btn.active { background: #e8f0fe; border-color: #93b4f5; color: #1a56db; }
-
 .legend { display: flex; gap: 16px; margin-bottom: 10px; flex-wrap: wrap; }
 .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #6b6a63; }
 .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-.dot-todo { background: #b0afa8; } .dot-inprogress { background: #d4930a; }
-.dot-done { background: #2d7a4f; } .dot-blocked { background: #b83220; }
-
+.dot-todo { background: #b0afa8; } .dot-inprogress { background: #d4930a; } .dot-done { background: #2d7a4f; } .dot-blocked { background: #b83220; }
 .hint { font-size: 11px; color: #a0a099; margin-bottom: 12px; }
-
 .card { background: #fff; border-radius: 12px; border: 1px solid #e0dfd6; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 400px; }
-
 .col-group-head { padding: 12px 10px 4px; font-size: 10px; font-weight: 700; color: #6b6a63; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; text-align: center; position: relative; user-select: none; }
 .col-drag-handle { display: none; position: absolute; left: 6px; top: 50%; transform: translateY(-50%); font-size: 14px; cursor: grab; color: #c0bfb8; }
 .col-group-head:hover .col-drag-handle { display: block; }
@@ -43,57 +38,46 @@ table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 400p
 .col-group-head:hover .col-actions { display: flex; }
 .col-btn { font-size: 10px; background: none; border: none; cursor: pointer; color: #a0a099; padding: 1px 3px; border-radius: 3px; }
 .col-btn:hover { background: #f0efe8; color: #1a1a18; }
-
 .sub-head { padding: 3px 10px 9px; font-size: 11px; font-weight: 500; color: #8a8980; border-bottom: 2px solid #e8e7e0; white-space: nowrap; min-width: 90px; }
 .sub-head-file { min-width: 110px; }
 .step-sep { border-left: 2px solid #e8e7e0; }
-
 tbody tr { border-bottom: 1px solid #f0efe8; transition: background .1s; }
 tbody tr:last-child { border-bottom: none; }
 tbody tr.row-dragging { opacity: .3; }
 tbody tr.row-drag-over-top { box-shadow: inset 0 2px 0 #1a56db; }
 tbody tr.row-drag-over-bottom { box-shadow: inset 0 -2px 0 #1a56db; }
 td { padding: 10px 10px; vertical-align: middle; }
-
 .row-drag-handle { cursor: grab; color: #d0cfc6; font-size: 14px; padding: 0 4px; display: inline-block; vertical-align: middle; user-select: none; }
 .row-drag-handle:hover { color: #8a8980; }
-
 .prog-name { font-weight: 600; color: #1a1a18; font-size: 13px; outline: none; min-width: 80px; display: inline-block; cursor: text; }
 .prog-name:focus { outline: 2px solid #93b4f5; border-radius: 4px; padding: 1px 4px; }
-
 .lang-wrap { display: flex; align-items: center; gap: 4px; margin-top: 3px; }
 .lang-select { font-size: 11px; color: #a0a099; background: #f0efe8; border: none; border-radius: 10px; padding: 2px 5px; cursor: pointer; outline: none; max-width: 110px; }
 .btn-lang-mgr { font-size: 10px; background: none; border: none; cursor: pointer; color: #c0bfb8; padding: 1px 3px; border-radius: 3px; }
 .btn-lang-mgr:hover { color: #1a56db; background: #e8f0fe; }
-
 .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; cursor: pointer; user-select: none; transition: transform .1s; }
 .badge:hover { transform: scale(1.04); }
 .badge:active { transform: scale(.97); }
-.badge-todo       { background: #f0efe8; color: #8a8980; border: 1px solid #d8d7ce; }
+.badge-todo { background: #f0efe8; color: #8a8980; border: 1px solid #d8d7ce; }
 .badge-inprogress { background: #fef3cd; color: #92621a; }
-.badge-done       { background: #d4f0e2; color: #1a6640; }
-.badge-blocked    { background: #fde0de; color: #922b1a; }
-
+.badge-done { background: #d4f0e2; color: #1a6640; }
+.badge-blocked { background: #fde0de; color: #922b1a; }
 .file-wrap { display: flex; flex-direction: column; gap: 2px; }
 .file-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: #1a56db; text-decoration: none; }
 .file-link:hover { text-decoration: underline; }
 .file-link svg { width: 11px; height: 11px; flex-shrink: 0; }
 .btn-file { font-size: 10px; color: #a0a099; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
 .btn-file:hover { color: #1a56db; }
-
 .progress-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .progress-bar { width: 56px; height: 7px; background: #e8e7e0; border-radius: 4px; overflow: hidden; }
 .progress-fill { height: 100%; border-radius: 4px; background: #2d7a4f; transition: width .3s; }
 .pct-label { font-size: 11px; color: #8a8980; font-weight: 600; }
-
 .btn-del-row { background: none; border: none; cursor: pointer; color: #d0cfc6; font-size: 14px; padding: 2px 5px; border-radius: 4px; }
 .btn-del-row:hover { color: #b83220; background: #fde0de; }
-
 .summary { display: flex; gap: 12px; padding: 14px 16px; background: #fafaf7; border-top: 1px solid #e8e7e0; flex-wrap: wrap; }
 .summary-card { flex: 1; min-width: 80px; background: #fff; border: 1px solid #e8e7e0; border-radius: 8px; padding: 10px 14px; text-align: center; }
 .summary-card .num { font-size: 22px; font-weight: 700; color: #1a1a18; }
 .summary-card .lbl { font-size: 11px; color: #8a8980; margin-top: 2px; }
-
 .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 100; align-items: center; justify-content: center; }
 .modal-bg.open { display: flex; }
 .modal { background: #fff; border-radius: 12px; padding: 24px; width: 340px; box-shadow: 0 8px 32px rgba(0,0,0,.18); }
@@ -102,14 +86,12 @@ td { padding: 10px 10px; vertical-align: middle; }
 .modal input[type=text] { width: 100%; padding: 8px 10px; border: 1px solid #d0cfc6; border-radius: 6px; font-size: 13px; outline: none; }
 .modal input[type=text]:focus { border-color: #93b4f5; }
 .modal-actions { display: flex; gap: 8px; margin-top: 18px; justify-content: flex-end; }
-
 .emoji-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
 .emoji-opt { font-size: 18px; cursor: pointer; padding: 4px; border-radius: 6px; border: 2px solid transparent; }
 .emoji-opt:hover, .emoji-opt.sel { border-color: #93b4f5; background: #e8f0fe; }
 .color-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
 .color-sw { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
 .color-sw:hover, .color-sw.sel { border-color: #1a56db; }
-
 .lang-list { max-height: 150px; overflow-y: auto; margin: 8px 0 12px; }
 .lang-item { display: flex; align-items: center; justify-content: space-between; padding: 6px 2px; border-bottom: 1px solid #f0efe8; }
 .lang-item:last-child { border-bottom: none; }
@@ -128,7 +110,7 @@ td { padding: 10px 10px; vertical-align: middle; }
     <button class="filter-btn" onclick="setFilter('blocked',this)">Bloqué</button>
     <button class="filter-btn" onclick="setFilter('done',this)">Terminé</button>
   </div>
-  <button class="btn" onclick="exportHTML()" style="background:#fff7e0;border-color:#e9a825;color:#92621a;font-weight:600">⬇️ Exporter index.html</button>
+  <button class="btn btn-export" onclick="exportHTML()">⬇️ Exporter index.html</button>
   <button class="btn btn-success" onclick="openAddCol()">+ Colonne</button>
   <button class="btn btn-primary" onclick="addRow()">+ Programme</button>
 </div>
@@ -139,7 +121,7 @@ td { padding: 10px 10px; vertical-align: middle; }
   <div class="legend-item"><div class="dot dot-done"></div> Terminé</div>
   <div class="legend-item"><div class="dot dot-blocked"></div> Bloqué</div>
 </div>
-<p class="hint">💡 Clic badge = changer statut &nbsp;·&nbsp; <b>⠿ glisser une ligne</b> pour réordonner &nbsp;·&nbsp; <b>⠿ glisser un en-tête</b> pour déplacer une colonne &nbsp;·&nbsp; Survoler colonne = ✏️ renommer / ✕ supprimer</p>
+<p class="hint">💡 Clic badge = changer statut &nbsp;·&nbsp; <b>⠿ glisser une ligne</b> pour réordonner &nbsp;·&nbsp; <b>⠿ glisser un en-tête</b> pour déplacer une colonne &nbsp;·&nbsp; Survoler colonne = ✏️ / ✕</p>
 
 <div class="card">
   <div class="table-wrap">
@@ -148,309 +130,642 @@ td { padding: 10px 10px; vertical-align: middle; }
   <div class="summary" id="summary"></div>
 </div>
 
-<!-- Modal fichier -->
-<div class="modal-bg" id="m-file">
-  <div class="modal">
-    <h3>Modifier le fichier</h3>
-    <label>Nom du fichier</label>
-    <input type="text" id="mf-name" placeholder="Slides_v1.pptx">
-    <label>Lien (URL)</label>
-    <input type="text" id="mf-url" placeholder="https://drive.google.com/...">
-    <div class="modal-actions">
-      <button class="btn" onclick="close('m-file')">Annuler</button>
-      <button class="btn btn-primary" onclick="saveFile()">Enregistrer</button>
-    </div>
-  </div>
-</div>
+<div class="modal-bg" id="m-file"><div class="modal"><h3>Modifier le fichier</h3><label>Nom du fichier</label><input type="text" id="mf-name" placeholder="Slides_v1.pptx"><label>Lien (URL)</label><input type="text" id="mf-url" placeholder="https://drive.google.com/..."><div class="modal-actions"><button class="btn" onclick="closeM('m-file')">Annuler</button><button class="btn btn-primary" onclick="saveFile()">Enregistrer</button></div></div></div>
+<div class="modal-bg" id="m-col"><div class="modal"><h3>Ajouter une colonne</h3><label>Nom</label><input type="text" id="mc-name" placeholder="ex: Validation client"><label>Icône</label><div class="emoji-row" id="mc-emoji"></div><label>Couleur</label><div class="color-row" id="mc-color"></div><div class="modal-actions"><button class="btn" onclick="closeM('m-col')">Annuler</button><button class="btn btn-primary" onclick="saveCol()">Ajouter</button></div></div></div>
+<div class="modal-bg" id="m-rename"><div class="modal"><h3>Renommer la colonne</h3><label>Nouveau nom</label><input type="text" id="mr-name"><div class="modal-actions"><button class="btn" onclick="closeM('m-rename')">Annuler</button><button class="btn btn-primary" onclick="saveRename()">Enregistrer</button></div></div></div>
+<div class="modal-bg" id="m-lang"><div class="modal"><h3>Gérer les langues</h3><div class="lang-list" id="ml-list"></div><div class="lang-add-row"><input type="text" id="ml-src" placeholder="FR" maxlength="5"><span style="color:#a0a099;font-weight:700">→</span><input type="text" id="ml-dst" placeholder="DE" maxlength="5"><button class="btn btn-primary" style="flex:1" onclick="addLang()">Ajouter</button></div><div class="modal-actions"><button class="btn" onclick="closeM('m-lang')">Fermer</button></div></div></div>
 
-<!-- Modal colonne -->
-<div class="modal-bg" id="m-col">
-  <div class="modal">
-    <h3>Ajouter une colonne</h3>
-    <label>Nom</label>
-    <input type="text" id="mc-name" placeholder="ex: Validation client">
-    <label>Icône</label>
-    <div class="emoji-row" id="mc-emoji"></div>
-    <label>Couleur</label>
-    <div class="color-row" id="mc-color"></div>
-    <div class="modal-actions">
-      <button class="btn" onclick="close('m-col')">Annuler</button>
-      <button class="btn btn-primary" onclick="saveCol()">Ajouter</button>
-    </div>
-  </div>
-</div>
+<script id="main-script">
+const STATUSES=['todo','inprogress','done','blocked'];
+const LABELS={todo:'À faire',inprogress:'En cours',done:'Terminé',blocked:'Bloqué'};
+const W={done:1,inprogress:.5,todo:0,blocked:0};
+const EMOJIS=['🎬','📄','🎨','✂️','🌐','✅','📁','🔊','📝','📧','🖥️','🎯','📊','🔗'];
+const CLRS=['#f0f7ff','#fff8f0','#f3f0ff','#f0fff5','#fff0f5','#fffde7','#f0fffe','#fef6ff'];
+const FILE_SVG=`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"/><polyline points="9 2 9 6 13 6"/></svg>`;
+const SK='sf_state', LK='sf_langs', VK='sf_version';
 
-<!-- Modal renommer -->
-<div class="modal-bg" id="m-rename">
-  <div class="modal">
-    <h3>Renommer la colonne</h3>
-    <label>Nouveau nom</label>
-    <input type="text" id="mr-name">
-    <div class="modal-actions">
-      <button class="btn" onclick="close('m-rename')">Annuler</button>
-      <button class="btn btn-primary" onclick="saveRename()">Enregistrer</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal langues -->
-<div class="modal-bg" id="m-lang">
-  <div class="modal">
-    <h3>Gérer les langues</h3>
-    <div class="lang-list" id="ml-list"></div>
-    <div class="lang-add-row">
-      <input type="text" id="ml-src" placeholder="FR" maxlength="5">
-      <span style="color:#a0a099;font-weight:700">→</span>
-      <input type="text" id="ml-dst" placeholder="DE" maxlength="5">
-      <button class="btn btn-primary" style="flex:1" onclick="addLang()">Ajouter</button>
-    </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="close('m-lang')">Fermer</button>
-    </div>
-  </div>
-</div>
-
-<script>
-const STATUSES = ['todo','inprogress','done','blocked'];
-const LABELS   = {todo:'À faire', inprogress:'En cours', done:'Terminé', blocked:'Bloqué'};
-const W        = {done:1, inprogress:.5, todo:0, blocked:0};
-const EMOJIS   = ['🎬','📄','🎨','✂️','🌐','✅','📁','🔊','📝','📧','🖥️','🎯','📊','🔗'];
-const CLRS     = ['#f0f7ff','#fff8f0','#f3f0ff','#f0fff5','#fff0f5','#fffde7','#f0fffe','#fef6ff'];
-const FILE_SVG = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"/><polyline points="9 2 9 6 13 6"/></svg>`;
-const STATE_KEY = 'sf_state', LANGS_KEY = 'sf_langs';
-
-// ── DONNÉES IMPORTÉES ────────────────────────────────────────
-const IMPORTED = {
-  cols: [
-    {id:'c1', label:'Montage original',    emoji:'✂️', color:'#f0f7ff'},
-    {id:'c2', label:'Trad. slides',        emoji:'📄', color:'#fff8f0'},
-    {id:'c3', label:'Mise en page Slides', emoji:'🎨', color:'#f3f0ff'},
-    {id:'c4', label:'Trad. vidéos',        emoji:'🎬', color:'#f0f7ff'},
-    {id:'c5', label:'Montage final',       emoji:'✂️', color:'#f0fff5'},
-    {id:'c6', label:'Mise en ligne',       emoji:'🌐', color:'#fff0f5'},
+// ── DONNÉES (mises à jour à chaque export) ───────────────────
+const DATA_VERSION='v1777367477964';
+const IMPORTED={
+  "cols": [
+    {
+      "id": "c1",
+      "label": "Montage original",
+      "emoji": "✂️",
+      "color": "#f0f7ff"
+    },
+    {
+      "id": "c2",
+      "label": "Trad. slides",
+      "emoji": "📄",
+      "color": "#fff8f0"
+    },
+    {
+      "id": "c3",
+      "label": "Mise en page Slides",
+      "emoji": "🎨",
+      "color": "#f3f0ff"
+    },
+    {
+      "id": "c4",
+      "label": "Trad. vidéos",
+      "emoji": "🎬",
+      "color": "#f0f7ff"
+    },
+    {
+      "id": "c5",
+      "label": "Montage final",
+      "emoji": "✂️",
+      "color": "#f0fff5"
+    },
+    {
+      "id": "c6",
+      "label": "Mise en ligne",
+      "emoji": "🌐",
+      "color": "#fff0f5"
+    }
   ],
-  rows: [
-    {name:'Ela Manga - Expanding in',              lang:'EN→FR', stages:{c1:'done',c2:'done',c3:'done',c4:'done',c5:'todo',c6:'todo'}, files:{c1:{l:'',u:''},c2:{l:'',u:''},c3:{l:'',u:''},c4:{l:'',u:''},c5:{l:'',u:''},c6:{l:'',u:''}}},
-    {name:'Bessel program',                         lang:'EN→FR', stages:{c1:'done',c2:'done',c3:'done',c4:'todo',c5:'todo',c6:'todo'}, files:{c1:{l:'',u:''},c2:{l:'',u:''},c3:{l:'',u:''},c4:{l:'',u:''},c5:{l:'',u:''},c6:{l:'',u:''}}},
-    {name:'Ruth Cohn - Trauma de négligence - ES',  lang:'EN→ES', stages:{c1:'done',c2:'done',c3:'done',c4:'done',c5:'done',c6:'todo'}, files:{c1:{l:'',u:''},c2:{l:'',u:''},c3:{l:'',u:''},c4:{l:'',u:''},c5:{l:'',u:''},c6:{l:'',u:''}}},
-    {name:'Ruth Cohn - Trauma de négligence - IT',  lang:'EN→IT', stages:{c1:'done',c2:'done',c3:'done',c4:'done',c5:'inprogress',c6:'todo'}, files:{c1:{l:'',u:''},c2:{l:'',u:''},c3:{l:'',u:''},c4:{l:'',u:''},c5:{l:'',u:''},c6:{l:'',u:''}}},
-    {name:'Ruth Cohn - Trauma de négligence - PL',  lang:'EN→PL', stages:{c1:'done',c2:'inprogress',c3:'todo',c4:'done',c5:'todo',c6:'todo'}, files:{c1:{l:'',u:''},c2:{l:'',u:''},c3:{l:'',u:''},c4:{l:'',u:''},c5:{l:'',u:''},c6:{l:'',u:''}}},
-    {name:'Ruth Cohn - Trauma de négligence - DE',  lang:'EN→DE', stages:{c1:'done',c2:'inprogress',c3:'todo',c4:'inprogress',c5:'todo',c6:'todo'}, files:{c1:{l:'',u:''},c2:{l:'',u:''},c3:{l:'',u:''},c4:{l:'',u:''},c5:{l:'',u:''},c6:{l:'',u:''}}},
-    {name:'Pat Ogden - PL',                         lang:'EN→PL', stages:{c1:'done',c2:'inprogress',c3:'todo',c4:'todo',c5:'todo',c6:'todo'}, files:{c1:{l:'',u:''},c2:{l:'',u:''},c3:{l:'',u:''},c4:{l:'',u:''},c5:{l:'',u:''},c6:{l:'',u:''}}},
-    {name:'Pat Ogden - DE',                         lang:'EN→DE', stages:{c1:'done',c2:'inprogress',c3:'todo',c4:'todo',c5:'todo',c6:'todo'}, files:{c1:{l:'',u:''},c2:{l:'',u:''},c3:{l:'',u:''},c4:{l:'',u:''},c5:{l:'',u:''},c6:{l:'',u:''}}},
-    {name:'Janina Fisher - nouveau programme',      lang:'EN→FR', stages:{c1:'done',c2:'done',c3:'done',c4:'inprogress',c5:'todo',c6:'todo'}, files:{c1:{l:'',u:''},c2:{l:'',u:''},c3:{l:'',u:''},c4:{l:'',u:''},c5:{l:'',u:''},c6:{l:'',u:''}}},
-    {name:'HeartMath - Cohérence Cardiaque',        lang:'EN→FR', stages:{c1:'done',c2:'todo',c3:'todo',c4:'todo',c5:'todo',c6:'todo'}, files:{c1:{l:'',u:''},c2:{l:'',u:''},c3:{l:'',u:''},c4:{l:'',u:''},c5:{l:'',u:''},c6:{l:'',u:''}}},
-    {name:'Ruth Lanius',                            lang:'EN→FR', stages:{c1:'done',c2:'todo',c3:'todo',c4:'todo',c5:'todo',c6:'todo'}, files:{c1:{l:'',u:''},c2:{l:'',u:''},c3:{l:'',u:''},c4:{l:'',u:''},c5:{l:'',u:''},c6:{l:'',u:''}}},
+  "rows": [
+    {
+      "name": "Ela Manga - Expanding in",
+      "lang": "EN→FR",
+      "stages": {
+        "c1": "done",
+        "c2": "done",
+        "c3": "done",
+        "c4": "done",
+        "c5": "todo",
+        "c6": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        },
+        "c6": {
+          "l": "",
+          "u": ""
+        }
+      }
+    },
+    {
+      "name": "Bessel program",
+      "lang": "EN→FR",
+      "stages": {
+        "c1": "done",
+        "c2": "done",
+        "c3": "done",
+        "c4": "todo",
+        "c5": "todo",
+        "c6": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        },
+        "c6": {
+          "l": "",
+          "u": ""
+        }
+      }
+    },
+    {
+      "name": "Ruth Cohn - Trauma de négligence - ES",
+      "lang": "EN→ES",
+      "stages": {
+        "c1": "done",
+        "c2": "done",
+        "c3": "done",
+        "c4": "done",
+        "c5": "done",
+        "c6": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        },
+        "c6": {
+          "l": "",
+          "u": ""
+        }
+      }
+    },
+    {
+      "name": "Ruth Cohn - Trauma de négligence - IT",
+      "lang": "EN→IT",
+      "stages": {
+        "c1": "done",
+        "c2": "done",
+        "c3": "done",
+        "c4": "done",
+        "c5": "inprogress",
+        "c6": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        },
+        "c6": {
+          "l": "",
+          "u": ""
+        }
+      }
+    },
+    {
+      "name": "Ruth Cohn - Trauma de négligence - PL",
+      "lang": "EN→PL",
+      "stages": {
+        "c1": "done",
+        "c2": "inprogress",
+        "c3": "todo",
+        "c4": "done",
+        "c5": "todo",
+        "c6": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        },
+        "c6": {
+          "l": "",
+          "u": ""
+        }
+      }
+    },
+    {
+      "name": "Ruth Cohn - Trauma de négligence - DE",
+      "lang": "EN→DE",
+      "stages": {
+        "c1": "done",
+        "c2": "inprogress",
+        "c3": "todo",
+        "c4": "inprogress",
+        "c5": "todo",
+        "c6": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        },
+        "c6": {
+          "l": "",
+          "u": ""
+        }
+      }
+    },
+    {
+      "name": "Pat Ogden - PL",
+      "lang": "EN→PL",
+      "stages": {
+        "c1": "done",
+        "c2": "inprogress",
+        "c3": "todo",
+        "c4": "todo",
+        "c5": "todo",
+        "c6": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        },
+        "c6": {
+          "l": "",
+          "u": ""
+        }
+      }
+    },
+    {
+      "name": "Pat Ogden - DE",
+      "lang": "EN→DE",
+      "stages": {
+        "c1": "done",
+        "c2": "inprogress",
+        "c3": "todo",
+        "c4": "todo",
+        "c5": "todo",
+        "c6": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        },
+        "c6": {
+          "l": "",
+          "u": ""
+        }
+      }
+    },
+    {
+      "name": "Janina Fisher - nouveau programme",
+      "lang": "EN→FR",
+      "stages": {
+        "c1": "done",
+        "c2": "done",
+        "c3": "done",
+        "c4": "inprogress",
+        "c5": "todo",
+        "c6": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        },
+        "c6": {
+          "l": "",
+          "u": ""
+        }
+      }
+    },
+    {
+      "name": "HeartMath - Cohérence Cardiaque",
+      "lang": "EN→FR",
+      "stages": {
+        "c1": "done",
+        "c2": "todo",
+        "c3": "todo",
+        "c4": "todo",
+        "c5": "todo",
+        "c6": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        },
+        "c6": {
+          "l": "",
+          "u": ""
+        }
+      }
+    },
+    {
+      "name": "Ruth Lanius",
+      "lang": "EN→FR",
+      "stages": {
+        "c1": "done",
+        "c2": "todo",
+        "c3": "todo",
+        "c4": "todo",
+        "c5": "todo",
+        "c6": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        },
+        "c6": {
+          "l": "",
+          "u": ""
+        }
+      }
+    }
   ]
 };
-const IMPORTED_LANGS = ['EN→FR','EN→ES','EN→DE','EN→IT','EN→PL','FR→EN'];
+const IMPORTED_LANGS=[
+  "EN→FR",
+  "EN→ES",
+  "EN→DE",
+  "EN→IT",
+  "EN→PL",
+  "FR→EN"
+];
 
-// ── STATE ────────────────────────────────────────────────────
-let state = JSON.parse(localStorage.getItem(STATE_KEY)||'null') || IMPORTED;
-let langs = JSON.parse(localStorage.getItem(LANGS_KEY)||'null') || IMPORTED_LANGS;
-
-function save()  { localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
-function saveLg(){ localStorage.setItem(LANGS_KEY, JSON.stringify(langs)); }
-
-let filter = 'all';
-function pct(row) { const v=state.cols.map(c=>W[row.stages[c.id]||'todo']); return Math.round(v.reduce((a,x)=>a+x,0)/v.length*100); }
-function rowStatus(row) {
-  const s = state.cols.map(c=>row.stages[c.id]||'todo');
-  if(s.includes('blocked')) return 'blocked';
-  if(s.every(x=>x==='done')) return 'done';
-  if(s.some(x=>x==='inprogress'||x==='done')) return 'inprogress';
-  return 'todo';
+// Écrase le localStorage si nouvelle version exportée
+if(localStorage.getItem(VK)!==DATA_VERSION){
+  localStorage.setItem(SK,JSON.stringify(IMPORTED));
+  localStorage.setItem(LK,JSON.stringify(IMPORTED_LANGS));
+  localStorage.setItem(VK,DATA_VERSION);
 }
+let state=JSON.parse(localStorage.getItem(SK))||IMPORTED;
+let langs=JSON.parse(localStorage.getItem(LK))||IMPORTED_LANGS;
 
-// ── RENDER ───────────────────────────────────────────────────
-function render() { renderHead(); renderBody(); renderSummary(); }
+function save(){localStorage.setItem(SK,JSON.stringify(state));}
+function saveLg(){localStorage.setItem(LK,JSON.stringify(langs));}
 
-function renderHead() {
-  let h1 = `<tr><th rowspan="2" style="vertical-align:bottom;padding:12px 10px 9px;text-align:left;border-bottom:2px solid #e8e7e0;white-space:nowrap;min-width:160px">Programme</th>`;
-  state.cols.forEach((c,ci) => {
-    const sep = ci>0 ? 'border-left:2px solid #e8e7e0;' : '';
-    h1 += `<th colspan="2" class="col-group-head" style="background:${c.color};${sep}"
-        draggable="true"
-        ondragstart="colDragStart(event,${ci})"
-        ondragover="colDragOver(event,${ci})"
-        ondragleave="colDragLeave(event)"
-        ondrop="colDrop(event,${ci})"
-        ondragend="colDragEnd()">
-      <span class="col-drag-handle">⠿</span>
-      ${c.emoji} ${c.label}
-      <div class="col-actions">
-        <button class="col-btn" onclick="openRename('${c.id}')">✏️</button>
-        <button class="col-btn" onclick="delCol('${c.id}')">✕</button>
-      </div>
+let filter='all';
+function pct(row){const v=state.cols.map(c=>W[row.stages[c.id]||'todo']);return Math.round(v.reduce((a,x)=>a+x,0)/v.length*100);}
+function rowStatus(row){const s=state.cols.map(c=>row.stages[c.id]||'todo');if(s.includes('blocked'))return 'blocked';if(s.every(x=>x==='done'))return 'done';if(s.some(x=>x==='inprogress'||x==='done'))return 'inprogress';return 'todo';}
+
+function render(){renderHead();renderBody();renderSummary();}
+
+function renderHead(){
+  let h1=`<tr><th rowspan="2" style="vertical-align:bottom;padding:12px 10px 9px;text-align:left;border-bottom:2px solid #e8e7e0;white-space:nowrap;min-width:160px">Programme</th>`;
+  state.cols.forEach((c,ci)=>{
+    const sep=ci>0?'border-left:2px solid #e8e7e0;':'';
+    h1+=`<th colspan="2" class="col-group-head" style="background:${c.color};${sep}" draggable="true" ondragstart="colDS(event,${ci})" ondragover="colDO(event,${ci})" ondragleave="colDL(event)" ondrop="colDrop(event,${ci})" ondragend="colDE()">
+      <span class="col-drag-handle">⠿</span>${c.emoji} ${c.label}
+      <div class="col-actions"><button class="col-btn" onclick="openRename('${c.id}')">✏️</button><button class="col-btn" onclick="delCol('${c.id}')">✕</button></div>
     </th>`;
   });
-  h1 += `<th rowspan="2" style="vertical-align:bottom;padding:12px 10px 9px;text-align:center;border-bottom:2px solid #e8e7e0">%</th>
-          <th rowspan="2" style="padding:4px;border-bottom:2px solid #e8e7e0"></th></tr>`;
-  let h2 = '<tr>';
-  state.cols.forEach((c,ci) => {
-    const sep = ci>0 ? 'border-left:2px solid #e8e7e0;' : '';
-    h2 += `<th class="sub-head" style="background:${c.color};${sep}">Statut</th>
-            <th class="sub-head sub-head-file" style="background:${c.color}">Fichier</th>`;
-  });
-  h2 += '</tr>';
-  document.getElementById('thead').innerHTML = h1 + h2;
+  h1+=`<th rowspan="2" style="vertical-align:bottom;padding:12px 10px 9px;text-align:center;border-bottom:2px solid #e8e7e0">%</th><th rowspan="2" style="padding:4px;border-bottom:2px solid #e8e7e0"></th></tr>`;
+  let h2='<tr>';
+  state.cols.forEach((c,ci)=>{const sep=ci>0?'border-left:2px solid #e8e7e0;':'';h2+=`<th class="sub-head" style="background:${c.color};${sep}">Statut</th><th class="sub-head sub-head-file" style="background:${c.color}">Fichier</th>`;});
+  h2+='</tr>';
+  document.getElementById('thead').innerHTML=h1+h2;
 }
 
-function renderBody() {
-  const tbody = document.getElementById('tbody');
-  tbody.innerHTML = '';
-  state.rows.forEach((r,ri) => {
-    if(filter !== 'all' && rowStatus(r) !== filter) return;
-    const p = pct(r);
-    const allLangs = langs.includes(r.lang) ? langs : [...langs, r.lang];
-    const opts = allLangs.map(l=>`<option${l===r.lang?' selected':''}>${l}</option>`).join('');
-    let cells = `<td style="white-space:nowrap">
-      <span class="row-drag-handle" draggable="true"
-        ondragstart="rowDragStart(event,${ri})"
-        ondragover="rowDragOver(event,${ri})"
-        ondragleave="rowDragLeave(event)"
-        ondrop="rowDrop(event,${ri})"
-        ondragend="rowDragEnd()">⠿</span>
+function renderBody(){
+  const tbody=document.getElementById('tbody');tbody.innerHTML='';
+  state.rows.forEach((r,ri)=>{
+    if(filter!=='all'&&rowStatus(r)!==filter)return;
+    const p=pct(r);
+    const allL=langs.includes(r.lang)?langs:[...langs,r.lang];
+    const opts=allL.map(l=>`<option${l===r.lang?' selected':''}>${l}</option>`).join('');
+    let cells=`<td style="white-space:nowrap">
+      <span class="row-drag-handle" draggable="true" ondragstart="rowDS(event,${ri})" ondragover="rowDO(event,${ri})" ondragleave="rowDL(event)" ondrop="rowDrop(event,${ri})" ondragend="rowDE()">⠿</span>
       <span class="prog-name" contenteditable="true" onblur="updateName(${ri},this.textContent.trim())">${r.name}</span>
-      <div class="lang-wrap">
-        <select class="lang-select" onchange="updateLang(${ri},this.value)">${opts}</select>
-        <button class="btn-lang-mgr" title="Gérer les langues" onclick="openLangs(${ri})">⚙️</button>
-      </div>
+      <div class="lang-wrap"><select class="lang-select" onchange="updateLang(${ri},this.value)">${opts}</select><button class="btn-lang-mgr" onclick="openLangs(${ri})">⚙️</button></div>
     </td>`;
-    state.cols.forEach((c,ci) => {
-      const s = r.stages[c.id]||'todo';
-      const f = r.files[c.id]||{l:'',u:''};
-      const sep = ci>0 ? 'border-left:2px solid #e8e7e0;' : '';
-      const fh = f.l
-        ? `<div class="file-wrap"><a class="file-link" href="${f.u}" target="_blank">${FILE_SVG}${f.l}</a><button class="btn-file" onclick="openFile(${ri},'${c.id}')">Modifier</button></div>`
-        : `<button class="btn-file" onclick="openFile(${ri},'${c.id}')">+ Fichier</button>`;
-      cells += `<td style="${sep}"><span class="badge badge-${s}" onclick="toggleStatus(${ri},'${c.id}')">${LABELS[s]}</span></td><td>${fh}</td>`;
+    state.cols.forEach((c,ci)=>{
+      const s=r.stages[c.id]||'todo';const f=r.files[c.id]||{l:'',u:''};
+      const sep=ci>0?'border-left:2px solid #e8e7e0;':'';
+      const fh=f.l?`<div class="file-wrap"><a class="file-link" href="${f.u}" target="_blank">${FILE_SVG}${f.l}</a><button class="btn-file" onclick="openFile(${ri},'${c.id}')">Modifier</button></div>`:`<button class="btn-file" onclick="openFile(${ri},'${c.id}')">+ Fichier</button>`;
+      cells+=`<td style="${sep}"><span class="badge badge-${s}" onclick="toggleStatus(${ri},'${c.id}')">${LABELS[s]}</span></td><td>${fh}</td>`;
     });
-    cells += `<td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:${p}%"></div></div><div class="pct-label">${p}%</div></div></td>
-              <td><button class="btn-del-row" onclick="delRow(${ri})">✕</button></td>`;
-    const tr = document.createElement('tr');
-    tr.innerHTML = cells;
-    tbody.appendChild(tr);
+    cells+=`<td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:${p}%"></div></div><div class="pct-label">${p}%</div></div></td><td><button class="btn-del-row" onclick="delRow(${ri})">✕</button></td>`;
+    const tr=document.createElement('tr');tr.innerHTML=cells;tbody.appendChild(tr);
   });
 }
 
-function renderSummary() {
-  const c = {done:0,inprogress:0,blocked:0,todo:0};
-  state.rows.forEach(r => c[rowStatus(r)]++);
-  document.getElementById('summary').innerHTML = `
-    <div class="summary-card"><div class="num">${state.rows.length}</div><div class="lbl">Programmes</div></div>
-    <div class="summary-card"><div class="num" style="color:#2d7a4f">${c.done}</div><div class="lbl">Terminés</div></div>
-    <div class="summary-card"><div class="num" style="color:#d4930a">${c.inprogress}</div><div class="lbl">En cours</div></div>
-    <div class="summary-card"><div class="num" style="color:#b83220">${c.blocked}</div><div class="lbl">Bloqués</div></div>`;
+function renderSummary(){
+  const c={done:0,inprogress:0,blocked:0,todo:0};
+  state.rows.forEach(r=>c[rowStatus(r)]++);
+  document.getElementById('summary').innerHTML=`<div class="summary-card"><div class="num">${state.rows.length}</div><div class="lbl">Programmes</div></div><div class="summary-card"><div class="num" style="color:#2d7a4f">${c.done}</div><div class="lbl">Terminés</div></div><div class="summary-card"><div class="num" style="color:#d4930a">${c.inprogress}</div><div class="lbl">En cours</div></div><div class="summary-card"><div class="num" style="color:#b83220">${c.blocked}</div><div class="lbl">Bloqués</div></div>`;
 }
 
 // ── ROW DRAG ─────────────────────────────────────────────────
-let rowDragIdx = null;
-function rowDragStart(e,ri) { rowDragIdx=ri; e.dataTransfer.effectAllowed='move'; setTimeout(()=>e.target.closest('tr')?.classList.add('row-dragging'),0); }
-function rowDragOver(e,ri) {
-  e.preventDefault();
-  if(ri===rowDragIdx) return;
-  document.querySelectorAll('#tbody tr').forEach(tr=>tr.classList.remove('row-drag-over-top','row-drag-over-bottom'));
-  const tr=e.target.closest('tr'); if(!tr) return;
-  const mid=tr.getBoundingClientRect().top+tr.getBoundingClientRect().height/2;
-  tr.classList.add(e.clientY<mid?'row-drag-over-top':'row-drag-over-bottom');
-}
-function rowDragLeave(e) { e.target.closest('tr')?.classList.remove('row-drag-over-top','row-drag-over-bottom'); }
-function rowDrop(e,ri) {
-  e.preventDefault();
-  if(rowDragIdx===null||rowDragIdx===ri) return;
-  const tr=e.target.closest('tr');
-  const rect=tr?.getBoundingClientRect();
-  const after=rect?e.clientY>=(rect.top+rect.height/2):false;
-  const rows=[...state.rows];
-  const [moved]=rows.splice(rowDragIdx,1);
-  const target=rowDragIdx<ri?ri-1:ri;
-  rows.splice(after?target+1:target,0,moved);
-  state.rows=rows; save(); render();
-}
-function rowDragEnd() { rowDragIdx=null; document.querySelectorAll('#tbody tr').forEach(tr=>tr.classList.remove('row-dragging','row-drag-over-top','row-drag-over-bottom')); }
+let rdi=null;
+function rowDS(e,ri){rdi=ri;e.dataTransfer.effectAllowed='move';setTimeout(()=>e.target.closest('tr')?.classList.add('row-dragging'),0);}
+function rowDO(e,ri){e.preventDefault();if(ri===rdi)return;document.querySelectorAll('#tbody tr').forEach(t=>t.classList.remove('row-drag-over-top','row-drag-over-bottom'));const tr=e.target.closest('tr');if(!tr)return;const mid=tr.getBoundingClientRect().top+tr.getBoundingClientRect().height/2;tr.classList.add(e.clientY<mid?'row-drag-over-top':'row-drag-over-bottom');}
+function rowDL(e){e.target.closest('tr')?.classList.remove('row-drag-over-top','row-drag-over-bottom');}
+function rowDrop(e,ri){e.preventDefault();if(rdi===null||rdi===ri)return;const tr=e.target.closest('tr');const rect=tr?.getBoundingClientRect();const after=rect?e.clientY>=(rect.top+rect.height/2):false;const rows=[...state.rows];const[moved]=rows.splice(rdi,1);const t=rdi<ri?ri-1:ri;rows.splice(after?t+1:t,0,moved);state.rows=rows;save();render();}
+function rowDE(){rdi=null;document.querySelectorAll('#tbody tr').forEach(t=>t.classList.remove('row-dragging','row-drag-over-top','row-drag-over-bottom'));}
 
 // ── COL DRAG ─────────────────────────────────────────────────
-let colDragIdx = null;
-function colDragStart(e,ci) { colDragIdx=ci; e.dataTransfer.effectAllowed='move'; setTimeout(()=>document.querySelectorAll('.col-group-head')[ci]?.classList.add('col-dragging'),0); }
-function colDragOver(e,ci) { e.preventDefault(); if(ci===colDragIdx) return; document.querySelectorAll('.col-group-head').forEach((th,i)=>th.classList.toggle('col-drag-over',i===ci)); }
-function colDragLeave(e) { e.currentTarget.classList.remove('col-drag-over'); }
-function colDrop(e,ci) {
-  e.preventDefault();
-  if(colDragIdx===null||colDragIdx===ci) return;
-  const cols=[...state.cols]; const [moved]=cols.splice(colDragIdx,1); cols.splice(ci,0,moved);
-  state.cols=cols; save(); render();
-}
-function colDragEnd() { colDragIdx=null; document.querySelectorAll('.col-group-head').forEach(th=>th.classList.remove('col-dragging','col-drag-over')); }
+let cdi=null;
+function colDS(e,ci){cdi=ci;e.dataTransfer.effectAllowed='move';setTimeout(()=>document.querySelectorAll('.col-group-head')[ci]?.classList.add('col-dragging'),0);}
+function colDO(e,ci){e.preventDefault();if(ci===cdi)return;document.querySelectorAll('.col-group-head').forEach((th,i)=>th.classList.toggle('col-drag-over',i===ci));}
+function colDL(e){e.currentTarget.classList.remove('col-drag-over');}
+function colDrop(e,ci){e.preventDefault();if(cdi===null||cdi===ci)return;const cols=[...state.cols];const[moved]=cols.splice(cdi,1);cols.splice(ci,0,moved);state.cols=cols;save();render();}
+function colDE(){cdi=null;document.querySelectorAll('.col-group-head').forEach(th=>th.classList.remove('col-dragging','col-drag-over'));}
 
 // ── ACTIONS ──────────────────────────────────────────────────
-function toggleStatus(ri,cid) { const cur=state.rows[ri].stages[cid]||'todo'; state.rows[ri].stages[cid]=STATUSES[(STATUSES.indexOf(cur)+1)%STATUSES.length]; save(); render(); }
-function updateName(ri,v) { state.rows[ri].name=v; save(); renderSummary(); }
-function updateLang(ri,v) { state.rows[ri].lang=v; save(); }
-function addRow() { const s={},f={}; state.cols.forEach(c=>{s[c.id]='todo';f[c.id]={l:'',u:''}}); state.rows.push({name:'Nouveau programme',lang:langs[0]||'EN→FR',stages:s,files:f}); save(); render(); }
-function delRow(ri) { if(confirm(`Supprimer "${state.rows[ri].name}" ?`)){state.rows.splice(ri,1);save();render();} }
-function delCol(cid) { const col=state.cols.find(c=>c.id===cid); if(confirm(`Supprimer "${col?.label}" ?`)){state.cols=state.cols.filter(c=>c.id!==cid);state.rows.forEach(r=>{delete r.stages[cid];delete r.files[cid]});save();render();} }
-function setFilter(f,btn) { filter=f; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); render(); }
+function toggleStatus(ri,cid){const cur=state.rows[ri].stages[cid]||'todo';state.rows[ri].stages[cid]=STATUSES[(STATUSES.indexOf(cur)+1)%STATUSES.length];save();render();}
+function updateName(ri,v){state.rows[ri].name=v;save();renderSummary();}
+function updateLang(ri,v){state.rows[ri].lang=v;save();}
+function addRow(){const s={},f={};state.cols.forEach(c=>{s[c.id]='todo';f[c.id]={l:'',u:''};});state.rows.push({name:'Nouveau programme',lang:langs[0]||'EN→FR',stages:s,files:f});save();render();}
+function delRow(ri){if(confirm(`Supprimer "${state.rows[ri].name}" ?`)){state.rows.splice(ri,1);save();render();}}
+function delCol(cid){const col=state.cols.find(c=>c.id===cid);if(confirm(`Supprimer "${col?.label}" ?`)){state.cols=state.cols.filter(c=>c.id!==cid);state.rows.forEach(r=>{delete r.stages[cid];delete r.files[cid];});save();render();}}
+function setFilter(f,btn){filter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
 
-// ── FILE MODAL ───────────────────────────────────────────────
+// ── MODALS ───────────────────────────────────────────────────
 let fileTarget=null;
-function openFile(ri,cid) { fileTarget={ri,cid}; const f=state.rows[ri].files[cid]||{l:'',u:''}; document.getElementById('mf-name').value=f.l||''; document.getElementById('mf-url').value=f.u==='#'?'':(f.u||''); open('m-file'); }
-function saveFile() { if(!fileTarget)return; const{ri,cid}=fileTarget; state.rows[ri].files[cid]={l:document.getElementById('mf-name').value.trim(),u:document.getElementById('mf-url').value.trim()||'#'}; save();close('m-file');render(); }
+function openFile(ri,cid){fileTarget={ri,cid};const f=state.rows[ri].files[cid]||{l:'',u:''};document.getElementById('mf-name').value=f.l||'';document.getElementById('mf-url').value=f.u==='#'?'':(f.u||'');openM('m-file');}
+function saveFile(){if(!fileTarget)return;const{ri,cid}=fileTarget;state.rows[ri].files[cid]={l:document.getElementById('mf-name').value.trim(),u:document.getElementById('mf-url').value.trim()||'#'};save();closeM('m-file');render();}
 
-// ── COL MODAL ────────────────────────────────────────────────
 let selEmoji=EMOJIS[0],selColor=CLRS[0];
-function openAddCol() { selEmoji=EMOJIS[0];selColor=CLRS[0]; document.getElementById('mc-name').value=''; document.getElementById('mc-emoji').innerHTML=EMOJIS.map(e=>`<span class="emoji-opt${e===selEmoji?' sel':''}" onclick="pickEmoji('${e}',this)">${e}</span>`).join(''); document.getElementById('mc-color').innerHTML=CLRS.map(c=>`<div class="color-sw${c===selColor?' sel':''}" style="background:${c}" onclick="pickColor('${c}',this)"></div>`).join(''); open('m-col'); }
+function openAddCol(){selEmoji=EMOJIS[0];selColor=CLRS[0];document.getElementById('mc-name').value='';document.getElementById('mc-emoji').innerHTML=EMOJIS.map(e=>`<span class="emoji-opt${e===selEmoji?' sel':''}" onclick="pickEmoji('${e}',this)">${e}</span>`).join('');document.getElementById('mc-color').innerHTML=CLRS.map(c=>`<div class="color-sw${c===selColor?' sel':''}" style="background:${c}" onclick="pickColor('${c}',this)"></div>`).join('');openM('m-col');}
 function pickEmoji(e,el){selEmoji=e;document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');}
 function pickColor(c,el){selColor=c;document.querySelectorAll('.color-sw').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');}
-function saveCol() { const name=document.getElementById('mc-name').value.trim(); if(!name)return; const id='c'+Date.now(); state.cols.push({id,label:name,emoji:selEmoji,color:selColor}); state.rows.forEach(r=>{r.stages[id]='todo';r.files[id]={l:'',u:''}}); save();close('m-col');render(); }
+function saveCol(){const name=document.getElementById('mc-name').value.trim();if(!name)return;const id='c'+Date.now();state.cols.push({id,label:name,emoji:selEmoji,color:selColor});state.rows.forEach(r=>{r.stages[id]='todo';r.files[id]={l:'',u:''};});save();closeM('m-col');render();}
 
-// ── RENAME MODAL ─────────────────────────────────────────────
 let renameTarget=null;
-function openRename(cid){renameTarget=cid;document.getElementById('mr-name').value=state.cols.find(c=>c.id===cid)?.label||'';open('m-rename');}
-function saveRename(){if(!renameTarget)return;const name=document.getElementById('mr-name').value.trim();if(!name)return;state.cols.find(c=>c.id===renameTarget).label=name;save();close('m-rename');render();}
+function openRename(cid){renameTarget=cid;document.getElementById('mr-name').value=state.cols.find(c=>c.id===cid)?.label||'';openM('m-rename');}
+function saveRename(){if(!renameTarget)return;const name=document.getElementById('mr-name').value.trim();if(!name)return;state.cols.find(c=>c.id===renameTarget).label=name;save();closeM('m-rename');render();}
 
-// ── LANG MODAL ───────────────────────────────────────────────
 let langRowTarget=null;
-function openLangs(ri){langRowTarget=ri;renderLangList();document.getElementById('ml-src').value='';document.getElementById('ml-dst').value='';open('m-lang');}
+function openLangs(ri){langRowTarget=ri;renderLangList();document.getElementById('ml-src').value='';document.getElementById('ml-dst').value='';openM('m-lang');}
 function renderLangList(){document.getElementById('ml-list').innerHTML=langs.map(l=>`<div class="lang-item"><span style="font-size:13px">${l}</span><button onclick="deleteLang('${l}')" style="font-size:11px;background:none;border:none;cursor:pointer;color:#c0bfb8;padding:2px 6px;border-radius:4px" onmouseover="this.style.color='#b83220';this.style.background='#fde0de'" onmouseout="this.style.color='#c0bfb8';this.style.background='none'">✕</button></div>`).join('');}
 function addLang(){const src=document.getElementById('ml-src').value.trim().toUpperCase();const dst=document.getElementById('ml-dst').value.trim().toUpperCase();if(!src||!dst)return;const l=src+'→'+dst;if(!langs.includes(l)){langs.push(l);saveLg();}if(langRowTarget!==null){state.rows[langRowTarget].lang=l;save();}renderLangList();document.getElementById('ml-src').value='';document.getElementById('ml-dst').value='';render();}
 function deleteLang(l){if(state.rows.some(r=>r.lang===l)){alert(`"${l}" est utilisée par un programme.`);return;}langs=langs.filter(x=>x!==l);saveLg();renderLangList();render();}
 
-// ── MODAL HELPERS ────────────────────────────────────────────
-function open(id){document.getElementById(id).classList.add('open');}
-function close(id){document.getElementById(id).classList.remove('open');}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
 document.getElementById('mf-url').addEventListener('keydown',e=>{if(e.key==='Enter')saveFile();});
 document.getElementById('ml-dst').addEventListener('keydown',e=>{if(e.key==='Enter')addLang();});
 document.getElementById('mr-name').addEventListener('keydown',e=>{if(e.key==='Enter')saveRename();});
 
 // ── EXPORT ───────────────────────────────────────────────────
-function exportHTML() {
-  // Récupère le code source original de la page
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', window.location.href, false);
-  xhr.send();
-  let src = xhr.responseText;
+function exportHTML(){
+  const newVersion='v'+Date.now();
+  const stateStr=JSON.stringify(state,null,2);
+  const langsStr=JSON.stringify(langs,null,2);
 
-  // Sérialise les données actuelles
-  const stateStr = JSON.stringify(state, null, 2);
-  const langsStr = JSON.stringify(langs, null, 2);
+  // Récupère le contenu du script
+  const scriptEl=document.getElementById('main-script');
+  let scriptContent=scriptEl.textContent;
 
-  // Remplace le bloc IMPORTED par les données actuelles
-  src = src.replace(
-    /const IMPORTED = \{[\s\S]*?\};\nconst IMPORTED_LANGS = \[[\s\S]*?\];/,
-    `const IMPORTED = ${stateStr};\nconst IMPORTED_LANGS = ${langsStr};`
-  );
+  // Injecte les données actuelles
+  scriptContent=scriptContent.replace(/const DATA_VERSION='[^']*';/,`const DATA_VERSION='${newVersion}';`);
+  scriptContent=scriptContent.replace(/const IMPORTED=\{[\s\S]*?\};\nconst IMPORTED_LANGS=\[[\s\S]*?\];/,`const IMPORTED=${stateStr};\nconst IMPORTED_LANGS=${langsStr};`);
 
-  const blob = new Blob([src], {type: 'text/html;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'index.html';
+  // Reconstruit le HTML complet
+  const css=document.querySelector('style').textContent;
+  const bodyClone=document.body.cloneNode(true);
+  // Vide thead/tbody car ils sont rendus dynamiquement
+  bodyClone.querySelector('#thead').innerHTML='';
+  bodyClone.querySelector('#tbody').innerHTML='';
+  bodyClone.querySelector('#summary').innerHTML='';
+
+  const html=`<!DOCTYPE html>\n<html lang="fr">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>Suivi production formations</title>\n<style>${css}</style>\n</head>\n${bodyClone.outerHTML.replace(/<script id="main-script">[\s\S]*?<\/script>/,`<script id="main-script">${scriptContent}<\/script>`)}\n</html>`;
+
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='index.html';
   a.click();
   URL.revokeObjectURL(a.href);
 }
 
 render();
 </script>
+
+
 </body>
 </html>
