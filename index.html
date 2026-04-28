@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suivi production formations</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f0; color: #1a1a18; min-height: 100vh; padding: 32px 24px; }
+
+  .top-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .top-bar h2 { font-size: 17px; font-weight: 600; color: #1a1a18; flex: 1; min-width: 180px; }
+  .btn { font-size: 12px; padding: 5px 13px; border-radius: 20px; border: 1px solid #d0cfc6; background: #fff; color: #6b6a63; cursor: pointer; white-space: nowrap; transition: all .15s; }
+  .btn:hover { background: #f0efe8; }
+  .btn-primary { background: #1a56db; color: #fff; border-color: #1a56db; font-weight: 600; }
+  .btn-primary:hover { background: #1648c0; }
+  .btn-success { background: #2d7a4f; color: #fff; border-color: #2d7a4f; font-weight: 600; }
+  .btn-success:hover { background: #236040; }
+
+  .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-btn { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid #d0cfc6; background: #fff; color: #6b6a63; cursor: pointer; transition: all .15s; }
+  .filter-btn:hover { background: #f0efe8; }
+  .filter-btn.active { background: #e8f0fe; border-color: #93b4f5; color: #1a56db; }
+
+  .legend { display: flex; gap: 16px; margin-bottom: 10px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #6b6a63; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .dot-todo { background: #b0afa8; } .dot-inprogress { background: #d4930a; }
+  .dot-done { background: #2d7a4f; } .dot-blocked { background: #b83220; }
+
+  .hint { font-size: 11px; color: #a0a099; margin-bottom: 12px; }
+
+  .card { background: #fff; border-radius: 12px; border: 1px solid #e0dfd6; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 400px; }
+
+  .col-group-head {
+    padding: 12px 10px 4px; font-size: 10px; font-weight: 700; color: #6b6a63;
+    text-transform: uppercase; letter-spacing: .06em; white-space: nowrap;
+    text-align: center; position: relative; user-select: none;
+  }
+  .drag-handle {
+    display: none; position: absolute; left: 6px; top: 50%; transform: translateY(-50%);
+    font-size: 14px; cursor: grab; color: #c0bfb8; line-height: 1;
+  }
+  .col-group-head:hover .drag-handle { display: block; }
+  .col-group-head.dragging { opacity: .3; }
+  .col-group-head.drag-over { outline: 2px dashed #93b4f5; outline-offset: -2px; border-radius: 4px; }
+
+  .col-actions { display: none; gap: 4px; position: absolute; top: 6px; right: 4px; }
+  .col-group-head:hover .col-actions { display: flex; }
+  .col-btn { font-size: 10px; background: none; border: none; cursor: pointer; color: #a0a099; padding: 1px 3px; border-radius: 3px; }
+  .col-btn:hover { background: #f0efe8; color: #1a1a18; }
+
+  .sub-head { padding: 3px 10px 9px; font-size: 11px; font-weight: 500; color: #8a8980; border-bottom: 2px solid #e8e7e0; white-space: nowrap; min-width: 90px; }
+  .sub-head-file { min-width: 110px; }
+  .step-sep { border-left: 2px solid #e8e7e0; }
+
+  tbody tr { border-bottom: 1px solid #f0efe8; }
+  tbody tr:last-child { border-bottom: none; }
+  td { padding: 10px 10px; vertical-align: middle; }
+
+  .prog-name { font-weight: 600; color: #1a1a18; font-size: 13px; outline: none; min-width: 90px; cursor: text; }
+  .prog-name:focus { outline: 2px solid #93b4f5; border-radius: 4px; padding: 1px 4px; }
+
+  .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; cursor: pointer; user-select: none; transition: transform .1s; }
+  .badge:hover { transform: scale(1.04); }
+  .badge:active { transform: scale(.97); }
+  .badge-todo       { background: #f0efe8; color: #8a8980; border: 1px solid #d8d7ce; }
+  .badge-inprogress { background: #fef3cd; color: #92621a; }
+  .badge-done       { background: #d4f0e2; color: #1a6640; }
+  .badge-blocked    { background: #fde0de; color: #922b1a; }
+
+  .file-wrap { display: flex; flex-direction: column; gap: 2px; }
+  .file-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: #1a56db; text-decoration: none; }
+  .file-link:hover { text-decoration: underline; }
+  .file-link svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .btn-edit-file { font-size: 10px; color: #a0a099; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+  .btn-edit-file:hover { color: #1a56db; }
+
+  .progress-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .progress-bar { width: 56px; height: 7px; background: #e8e7e0; border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; background: #2d7a4f; transition: width .3s; }
+  .pct-label { font-size: 11px; color: #8a8980; font-weight: 600; }
+
+  .btn-del-row { background: none; border: none; cursor: pointer; color: #d0cfc6; font-size: 14px; padding: 2px 5px; border-radius: 4px; }
+  .btn-del-row:hover { color: #b83220; background: #fde0de; }
+
+  .summary { display: flex; gap: 12px; padding: 14px 16px; background: #fafaf7; border-top: 1px solid #e8e7e0; flex-wrap: wrap; }
+  .summary-card { flex: 1; min-width: 80px; background: #fff; border: 1px solid #e8e7e0; border-radius: 8px; padding: 10px 14px; text-align: center; }
+  .summary-card .num { font-size: 22px; font-weight: 700; color: #1a1a18; }
+  .summary-card .lbl { font-size: 11px; color: #8a8980; margin-top: 2px; }
+
+  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 100; align-items: center; justify-content: center; }
+  .modal-bg.open { display: flex; }
+  .modal { background: #fff; border-radius: 12px; padding: 24px; width: 340px; box-shadow: 0 8px 32px rgba(0,0,0,.18); }
+  .modal h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+  .modal label { font-size: 12px; color: #6b6a63; display: block; margin-bottom: 4px; margin-top: 12px; }
+  .modal input { width: 100%; padding: 8px 10px; border: 1px solid #d0cfc6; border-radius: 6px; font-size: 13px; outline: none; }
+  .modal input:focus { border-color: #93b4f5; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 18px; justify-content: flex-end; }
+  .col-emoji-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .emoji-opt { font-size: 18px; cursor: pointer; padding: 4px; border-radius: 6px; border: 2px solid transparent; }
+  .emoji-opt:hover, .emoji-opt.selected { border-color: #93b4f5; background: #e8f0fe; }
+  .col-colors { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .color-swatch { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+  .color-swatch:hover, .color-swatch.selected { border-color: #1a56db; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h2>🎓 Suivi production formations</h2>
+  <div class="filter-group">
+    <button class="filter-btn active" onclick="filterStatus('all',this)">Tous</button>
+    <button class="filter-btn" onclick="filterStatus('inprogress',this)">En cours</button>
+    <button class="filter-btn" onclick="filterStatus('blocked',this)">Bloqué</button>
+    <button class="filter-btn" onclick="filterStatus('done',this)">Terminé</button>
+  </div>
+  <button class="btn btn-success" onclick="openAddCol()">+ Colonne</button>
+  <button class="btn btn-primary" onclick="addRow()">+ Programme</button>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot dot-todo"></div> À faire</div>
+  <div class="legend-item"><div class="dot dot-inprogress"></div> En cours</div>
+  <div class="legend-item"><div class="dot dot-done"></div> Terminé</div>
+  <div class="legend-item"><div class="dot dot-blocked"></div> Bloqué</div>
+</div>
+<p class="hint">💡 Clic badge = changer statut &nbsp;·&nbsp; Clic nom = renommer &nbsp;·&nbsp; <b>Glisser ⠿ pour déplacer une colonne</b> &nbsp;·&nbsp; Survoler colonne = renommer / supprimer</p>
+
+<div class="card">
+  <div class="table-wrap">
+    <table id="main-table">
+      <thead id="thead"></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div class="summary" id="summary"></div>
+</div>
+
+<!-- Modal fichier -->
+<div class="modal-bg" id="modal-file">
+  <div class="modal">
+    <h3>Modifier le fichier</h3>
+    <label>Nom du fichier</label>
+    <input id="mf-name" type="text" placeholder="ex: Slides_Excel_FR_v1.pptx">
+    <label>Lien (URL)</label>
+    <input id="mf-url" type="text" placeholder="https://drive.google.com/...">
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-file')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveFile()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal colonne -->
+<div class="modal-bg" id="modal-col">
+  <div class="modal">
+    <h3>Ajouter une colonne</h3>
+    <label>Nom de la colonne</label>
+    <input id="mc-name" type="text" placeholder="ex: Validation client">
+    <label>Icône</label>
+    <div class="col-emoji-row" id="emoji-row"></div>
+    <label>Couleur d'en-tête</label>
+    <div class="col-colors" id="color-row"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-col')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveCol()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal renommer -->
+<div class="modal-bg" id="modal-rename">
+  <div class="modal">
+    <h3>Renommer la colonne</h3>
+    <label>Nouveau nom</label>
+    <input id="mr-name" type="text">
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-rename')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveRename()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STATUSES=['todo','inprogress','done','blocked'];
+const LABELS={todo:'À faire',inprogress:'En cours',done:'Terminé',blocked:'Bloqué'};
+const WEIGHTS={done:1,inprogress:0.5,todo:0,blocked:0};
+const LANGS=['EN→FR','EN→ES','EN→DE','EN→IT','FR→EN','ES→EN'];
+const EMOJIS=['🎬','📄','🎨','✂️','🌐','✅','📁','🔊','📝','📧','🖥️','🎯','📊','🔗'];
+const COLORS=['#f0f7ff','#fff8f0','#f3f0ff','#f0fff5','#fff0f5','#fffde7','#f0fffe','#fef6ff'];
+const FILE_ICON=`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"/><polyline points="9 2 9 6 13 6"/></svg>`;
+
+const DEFAULT_COLS=[
+  {id:'trad-video',   label:'Trad. vidéos', emoji:'🎬',color:'#f0f7ff'},
+  {id:'trad-slides',  label:'Trad. slides', emoji:'📄',color:'#fff8f0'},
+  {id:'mise-en-page', label:'Mise en page', emoji:'🎨',color:'#f3f0ff'},
+  {id:'montage',      label:'Montage',      emoji:'✂️',color:'#f0fff5'},
+  {id:'mise-en-ligne',label:'Mise en ligne',emoji:'🌐',color:'#fff0f5'},
+];
+const SAMPLE=[
+  ['done','done','done','done','done'],
+  ['done','done','inprogress','inprogress','todo'],
+  ['done','inprogress','todo','todo','todo'],
+  ['inprogress','inprogress','todo','todo','todo'],
+  ['inprogress','todo','todo','todo','todo'],
+  ['blocked','todo','todo','todo','todo'],
+  ['todo','todo','todo','todo','todo'],
+];
+const NAMES=['Leadership','Excel avancé','Gestion projet','Communication','Sécurité SI','Data analyst','RH essentiels'];
+const DEFAULT_ROWS=NAMES.map((name,i)=>({
+  name, lang:i===2||i===5?'EN→ES':'EN→FR',
+  stages:Object.fromEntries(DEFAULT_COLS.map((c,ci)=>[c.id,SAMPLE[i][ci]||'todo'])),
+  files:Object.fromEntries(DEFAULT_COLS.map(c=>[c.id,{l:'',u:''}]))
+}));
+
+let state=JSON.parse(localStorage.getItem('suivi_v3')||'null')||{cols:[...DEFAULT_COLS],rows:DEFAULT_ROWS.map(r=>({...r,stages:{...r.stages},files:{...r.files}}))};
+let currentFilter='all', modalFileTarget=null, renameTarget=null;
+let selectedEmoji=EMOJIS[0], selectedColor=COLORS[0];
+let dragColIdx=null;
+
+function save(){localStorage.setItem('suivi_v3',JSON.stringify(state));}
+function pct(row){const v=state.cols.map(c=>WEIGHTS[row.stages[c.id]||'todo']);return Math.round(v.reduce((a,x)=>a+x,0)/v.length*100);}
+function rowStatus(row){
+  const s=state.cols.map(c=>row.stages[c.id]||'todo');
+  if(s.includes('blocked'))return 'blocked';
+  if(s.every(x=>x==='done'))return 'done';
+  if(s.some(x=>x==='inprogress'||x==='done'))return 'inprogress';
+  return 'todo';
+}
+
+function render(filter){if(filter!==undefined)currentFilter=filter;renderHead();renderBody();renderSummary();}
+
+function renderHead(){
+  const cols=state.cols;
+  let r1=`<tr><th rowspan="2" style="vertical-align:bottom;padding:12px 10px 9px;text-align:left;border-bottom:2px solid #e8e7e0;white-space:nowrap">Programme</th>`;
+  cols.forEach((c,ci)=>{
+    const sep=ci>0?'border-left:2px solid #e8e7e0;':'';
+    r1+=`<th colspan="2" class="col-group-head" style="background:${c.color};${sep}" draggable="true"
+          ondragstart="dragStart(${ci})" ondragover="dragOver(event,${ci})" ondragleave="dragLeave(event)" ondrop="drop(event,${ci})" ondragend="dragEnd()">
+          <span class="drag-handle" title="Déplacer">⠿</span>
+          ${c.emoji} ${c.label}
+          <div class="col-actions">
+            <button class="col-btn" onclick="openRename('${c.id}')">✏️</button>
+            <button class="col-btn" onclick="deleteCol('${c.id}')">✕</button>
+          </div>
+        </th>`;
+  });
+  r1+=`<th rowspan="2" style="vertical-align:bottom;padding:12px 10px 9px;text-align:center;border-bottom:2px solid #e8e7e0">%</th><th rowspan="2" style="padding:4px"></th></tr>`;
+  let r2='<tr>';
+  cols.forEach((c,ci)=>{
+    const sep=ci>0?'border-left:2px solid #e8e7e0;':'';
+    r2+=`<th class="sub-head" style="background:${c.color};${sep}">Statut</th><th class="sub-head sub-head-file" style="background:${c.color}">Fichier</th>`;
+  });
+  r2+='</tr>';
+  document.getElementById('thead').innerHTML=r1+r2;
+}
+
+function renderBody(){
+  const tbody=document.getElementById('tbody');
+  tbody.innerHTML='';
+  state.rows.forEach((r,ri)=>{
+    const rs=rowStatus(r);
+    if(currentFilter!=='all'&&rs!==currentFilter)return;
+    const p=pct(r);
+    const langOpts=LANGS.map(l=>`<option${l===r.lang?' selected':''}>${l}</option>`).join('');
+    let cells=`<td>
+      <div class="prog-name" contenteditable="true" onblur="updateName(${ri},this.textContent.trim())">${r.name}</div>
+      <select style="font-size:11px;color:#a0a099;background:#f0efe8;border:none;border-radius:10px;padding:2px 5px;cursor:pointer;outline:none;margin-top:3px" onchange="updateLang(${ri},this.value)">${langOpts}</select>
+    </td>`;
+    state.cols.forEach((c,ci)=>{
+      const s=r.stages[c.id]||'todo';
+      const f=r.files[c.id]||{l:'',u:''};
+      const sep=ci>0?'border-left:2px solid #e8e7e0;':'';
+      const fh=f.l?`<div class="file-wrap"><a class="file-link" href="${f.u}" target="_blank">${FILE_ICON}${f.l}</a><button class="btn-edit-file" onclick="openFileModal(${ri},'${c.id}')">Modifier</button></div>`
+                  :`<button class="btn-edit-file" onclick="openFileModal(${ri},'${c.id}')">+ Fichier</button>`;
+      cells+=`<td style="${sep}"><span class="badge badge-${s}" onclick="toggleStatus(${ri},'${c.id}')">${LABELS[s]}</span></td><td>${fh}</td>`;
+    });
+    cells+=`<td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:${p}%"></div></div><div class="pct-label">${p}%</div></div></td>
+            <td><button class="btn-del-row" onclick="deleteRow(${ri})">✕</button></td>`;
+    const tr=document.createElement('tr');
+    tr.innerHTML=cells;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderSummary(){
+  const c={done:0,inprogress:0,blocked:0,todo:0};
+  state.rows.forEach(r=>c[rowStatus(r)]++);
+  document.getElementById('summary').innerHTML=`
+    <div class="summary-card"><div class="num">${state.rows.length}</div><div class="lbl">Programmes</div></div>
+    <div class="summary-card"><div class="num" style="color:#2d7a4f">${c.done}</div><div class="lbl">Terminés</div></div>
+    <div class="summary-card"><div class="num" style="color:#d4930a">${c.inprogress}</div><div class="lbl">En cours</div></div>
+    <div class="summary-card"><div class="num" style="color:#b83220">${c.blocked}</div><div class="lbl">Bloqués</div></div>`;
+}
+
+/* ---- DRAG & DROP ---- */
+function dragStart(ci){dragColIdx=ci;setTimeout(()=>{document.querySelectorAll('.col-group-head')[ci]?.classList.add('dragging');},0);}
+function dragOver(e,ci){e.preventDefault();if(ci!==dragColIdx){document.querySelectorAll('.col-group-head').forEach((th,i)=>th.classList.toggle('drag-over',i===ci));}}
+function dragLeave(e){e.currentTarget.classList.remove('drag-over');}
+function drop(e,ci){
+  e.preventDefault();
+  if(dragColIdx===null||dragColIdx===ci)return;
+  const cols=[...state.cols];
+  const[moved]=cols.splice(dragColIdx,1);
+  cols.splice(ci,0,moved);
+  state.cols=cols;
+  save();render();
+}
+function dragEnd(){dragColIdx=null;document.querySelectorAll('.col-group-head').forEach(th=>th.classList.remove('dragging','drag-over'));}
+
+/* ---- ACTIONS ---- */
+function toggleStatus(ri,colId){const cur=state.rows[ri].stages[colId]||'todo';state.rows[ri].stages[colId]=STATUSES[(STATUSES.indexOf(cur)+1)%STATUSES.length];save();render();}
+function updateName(ri,val){state.rows[ri].name=val;save();renderSummary();}
+function updateLang(ri,val){state.rows[ri].lang=val;save();}
+function addRow(){const s={},f={};state.cols.forEach(c=>{s[c.id]='todo';f[c.id]={l:'',u:''};});state.rows.push({name:'Nouveau programme',lang:'EN→FR',stages:s,files:f});save();render();}
+function deleteRow(ri){if(confirm(`Supprimer "${state.rows[ri].name}" ?`)){state.rows.splice(ri,1);save();render();}}
+function deleteCol(colId){if(confirm(`Supprimer la colonne "${state.cols.find(c=>c.id===colId)?.label}" ?`)){state.cols=state.cols.filter(c=>c.id!==colId);state.rows.forEach(r=>{delete r.stages[colId];delete r.files[colId];});save();render();}}
+
+function openFileModal(ri,colId){modalFileTarget={ri,colId};const f=state.rows[ri].files[colId]||{l:'',u:''};document.getElementById('mf-name').value=f.l||'';document.getElementById('mf-url').value=f.u==='#'?'':(f.u||'');document.getElementById('modal-file').classList.add('open');}
+function saveFile(){if(!modalFileTarget)return;const{ri,colId}=modalFileTarget;state.rows[ri].files[colId]={l:document.getElementById('mf-name').value.trim(),u:document.getElementById('mf-url').value.trim()||'#'};save();closeModal('modal-file');render();}
+
+function openAddCol(){
+  selectedEmoji=EMOJIS[0];selectedColor=COLORS[0];
+  document.getElementById('mc-name').value='';
+  document.getElementById('emoji-row').innerHTML=EMOJIS.map(e=>`<span class="emoji-opt${e===selectedEmoji?' selected':''}" onclick="selectEmoji('${e}',this)">${e}</span>`).join('');
+  document.getElementById('color-row').innerHTML=COLORS.map(c=>`<div class="color-swatch${c===selectedColor?' selected':''}" style="background:${c}" onclick="selectColor('${c}',this)"></div>`).join('');
+  document.getElementById('modal-col').classList.add('open');
+}
+function selectEmoji(e,el){selectedEmoji=e;document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');}
+function selectColor(c,el){selectedColor=c;document.querySelectorAll('.color-swatch').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');}
+function saveCol(){const name=document.getElementById('mc-name').value.trim();if(!name)return;const id='col-'+Date.now();state.cols.push({id,label:name,emoji:selectedEmoji,color:selectedColor});state.rows.forEach(r=>{r.stages[id]='todo';r.files[id]={l:'',u:''};});save();closeModal('modal-col');render();}
+
+function openRename(colId){renameTarget=colId;document.getElementById('mr-name').value=state.cols.find(c=>c.id===colId)?.label||'';document.getElementById('modal-rename').classList.add('open');}
+function saveRename(){if(!renameTarget)return;const name=document.getElementById('mr-name').value.trim();if(!name)return;state.cols.find(c=>c.id===renameTarget).label=name;save();closeModal('modal-rename');render();}
+
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function filterStatus(status,btn){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render(status);}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+document.getElementById('mf-url').addEventListener('keydown',e=>{if(e.key==='Enter')saveFile();});
+
+render();
+</script>
+</body>
+</html>
