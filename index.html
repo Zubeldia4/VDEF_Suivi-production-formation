@@ -74,6 +74,9 @@ td { padding: 10px 10px; vertical-align: middle; }
 .pct-label { font-size: 11px; color: #8a8980; font-weight: 600; }
 .btn-del-row { background: none; border: none; cursor: pointer; color: #d0cfc6; font-size: 14px; padding: 2px 5px; border-radius: 4px; }
 .btn-del-row:hover { color: #b83220; background: #fde0de; }
+.cell-comment { font-size: 10px; color: #a0a099; margin-top: 4px; min-width: 80px; max-width: 140px; width: 100%; background: none; border: none; border-bottom: 1px dashed #e0dfd6; outline: none; resize: none; font-family: inherit; line-height: 1.3; padding: 1px 2px; overflow: hidden; display: block; }
+.cell-comment:focus { border-bottom-color: #93b4f5; color: #1a1a18; background: #f8f8ff; border-radius: 3px 3px 0 0; }
+.cell-comment::placeholder { color: #d0cfc6; font-style: italic; }
 .summary { display: flex; gap: 12px; padding: 14px 16px; background: #fafaf7; border-top: 1px solid #e8e7e0; flex-wrap: wrap; }
 .summary-card { flex: 1; min-width: 80px; background: #fff; border: 1px solid #e8e7e0; border-radius: 8px; padding: 10px 14px; text-align: center; }
 .summary-card .num { font-size: 22px; font-weight: 700; color: #1a1a18; }
@@ -145,7 +148,7 @@ const FILE_SVG=`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strok
 const SK='sf_state', LK='sf_langs', VK='sf_version';
 
 // ── DONNÉES (mises à jour à chaque export) ───────────────────
-const DATA_VERSION='v1779289237487';
+const DATA_VERSION='v1780045738982';
 const IMPORTED={
   "cols": [
     {
@@ -900,8 +903,9 @@ function renderBody(){
     state.cols.forEach((c,ci)=>{
       const s=r.stages[c.id]||'todo';const f=r.files[c.id]||{l:'',u:''};
       const sep=ci>0?'border-left:2px solid #e8e7e0;':'';
+      const comment = (r.comments && r.comments[c.id]) || '';
       const fh=f.l?`<div class="file-wrap"><a class="file-link" href="${f.u}" target="_blank">${FILE_SVG}${f.l}</a><button class="btn-file" onclick="openFile(${ri},'${c.id}')">Modifier</button></div>`:`<button class="btn-file" onclick="openFile(${ri},'${c.id}')">+ Fichier</button>`;
-      cells+=`<td style="${sep}"><span class="badge badge-${s}" onclick="toggleStatus(${ri},'${c.id}')">${LABELS[s]}</span></td><td>${fh}</td>`;
+      cells+=`<td style="${sep}"><span class="badge badge-${s}" onclick="toggleStatus(${ri},'${c.id}')">${LABELS[s]}</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(${ri},'${c.id}',this.value)" oninput="autoResize(this)">${comment}</textarea></td><td>${fh}</td>`;
     });
     cells+=`<td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:${p}%"></div></div><div class="pct-label">${p}%</div></div></td><td><button class="btn-del-row" onclick="delRow(${ri})">✕</button></td>`;
     const tr=document.createElement('tr');tr.innerHTML=cells;tbody.appendChild(tr);
@@ -934,7 +938,9 @@ function colDE(){cdi=null;document.querySelectorAll('.col-group-head').forEach(t
 function toggleStatus(ri,cid){const cur=state.rows[ri].stages[cid]||'todo';state.rows[ri].stages[cid]=STATUSES[(STATUSES.indexOf(cur)+1)%STATUSES.length];save();render();}
 function updateName(ri,v){state.rows[ri].name=v;save();renderSummary();}
 function updateLang(ri,v){state.rows[ri].lang=v;save();}
-function addRow(){const s={},f={};state.cols.forEach(c=>{s[c.id]='todo';f[c.id]={l:'',u:''};});state.rows.push({name:'Nouveau programme',lang:langs[0]||'EN→FR',stages:s,files:f});save();render();}
+function updateComment(ri,cid,v){if(!state.rows[ri].comments)state.rows[ri].comments={};state.rows[ri].comments[cid]=v.trim();save();}
+function autoResize(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
+function addRow(){const s={},f={},cm={};state.cols.forEach(c=>{s[c.id]='todo';f[c.id]={l:'',u:''};cm[c.id]='';});state.rows.push({name:'Nouveau programme',lang:langs[0]||'EN→FR',stages:s,files:f,comments:cm});save();render();}
 function delRow(ri){if(confirm(`Supprimer "${state.rows[ri].name}" ?`)){state.rows.splice(ri,1);save();render();}}
 function delCol(cid){const col=state.cols.find(c=>c.id===cid);if(confirm(`Supprimer "${col?.label}" ?`)){state.cols=state.cols.filter(c=>c.id!==cid);state.rows.forEach(r=>{delete r.stages[cid];delete r.files[cid];});save();render();}}
 function setFilter(f,btn){filter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
@@ -1012,5 +1018,6 @@ render();
 <iza-yyknszroqnac></iza-yyknszroqnac><span id="PING_CONTENT_DLS_POPUP" style="display: none;"></span><div style="background-color: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; bottom: 15px; display: block; margin: 0px; opacity: 1; padding: 0px; position: fixed; right: 15px; z-index: 2147483647;"></div>
 
 
-<span id="PING_CONTENT_DLS_POPUP" style="display: none;"></span><div style="background-color: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; bottom: 15px; display: block; margin: 0px; opacity: 1; padding: 0px; position: fixed; right: 15px; z-index: 2147483647;"></div></body>
+<span id="PING_CONTENT_DLS_POPUP" style="display: none;"></span><div style="background-color: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; bottom: 15px; display: block; margin: 0px; opacity: 1; padding: 0px; position: fixed; right: 15px; z-index: 2147483647;"></div>
+</body>
 </html>
