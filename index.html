@@ -77,6 +77,14 @@ td { padding: 10px 10px; vertical-align: middle; }
 .cell-comment { font-size: 10px; color: #a0a099; margin-top: 4px; min-width: 80px; max-width: 140px; width: 100%; background: none; border: none; border-bottom: 1px dashed #e0dfd6; outline: none; resize: none; font-family: inherit; line-height: 1.3; padding: 1px 2px; overflow: hidden; display: block; }
 .cell-comment:focus { border-bottom-color: #93b4f5; color: #1a1a18; background: #f8f8ff; border-radius: 3px 3px 0 0; }
 .cell-comment::placeholder { color: #d0cfc6; font-style: italic; }
+.done-toggle { display: flex; align-items: center; gap: 8px; padding: 10px 16px; cursor: pointer; background: #f0fff5; border-top: 2px dashed #d4f0e2; color: #2d7a4f; font-size: 12px; font-weight: 600; user-select: none; transition: background .15s; }
+.done-toggle:hover { background: #e6fdf0; }
+.done-toggle .arrow { font-size: 10px; transition: transform .2s; display: inline-block; }
+.done-toggle.open .arrow { transform: rotate(90deg); }
+.done-section { display: none; }
+.done-section.open { display: table-row-group; }
+.done-section tr { opacity: .65; }
+.done-section tr:hover { opacity: 1; background: #f8fff9; }
 .summary { display: flex; gap: 12px; padding: 14px 16px; background: #fafaf7; border-top: 1px solid #e8e7e0; flex-wrap: wrap; }
 .summary-card { flex: 1; min-width: 80px; background: #fff; border: 1px solid #e8e7e0; border-radius: 8px; padding: 10px 14px; text-align: center; }
 .summary-card .num { font-size: 22px; font-weight: 700; color: #1a1a18; }
@@ -888,28 +896,57 @@ function renderHead(){
   document.getElementById('thead').innerHTML=h1+h2;
 }
 
+let doneOpen=false;
+function toggleDone(){
+  doneOpen=!doneOpen;
+  const s=document.getElementById('done-tbody');
+  const t=document.getElementById('done-toggle');
+  if(s)s.classList.toggle('open',doneOpen);
+  if(t){t.classList.toggle('open',doneOpen);t.querySelector('.arrow').parentElement.innerHTML=t.innerHTML.replace(/cliquer pour \w+/,`cliquer pour ${doneOpen?'masquer':'afficher'}`);}
+}
+
+function buildRow(r,ri){
+  const p=pct(r);
+  const allL=langs.includes(r.lang)?langs:[...langs,r.lang];
+  const opts=allL.map(l=>`<option${l===r.lang?' selected':''}>${l}</option>`).join('');
+  let cells=`<td style="white-space:nowrap">
+    <span class="row-drag-handle" draggable="true" ondragstart="rowDS(event,${ri})" ondragover="rowDO(event,${ri})" ondragleave="rowDL(event)" ondrop="rowDrop(event,${ri})" ondragend="rowDE()">⠿</span>
+    <span class="prog-name" contenteditable="true" onblur="updateName(${ri},this.textContent.trim())">${r.name}</span>
+    <div class="lang-wrap"><select class="lang-select" onchange="updateLang(${ri},this.value)">${opts}</select><button class="btn-lang-mgr" onclick="openLangs(${ri})">⚙️</button></div>
+  </td>`;
+  state.cols.forEach((c,ci)=>{
+    const s=r.stages[c.id]||'todo';const f=r.files[c.id]||{l:'',u:''};
+    const comment=(r.comments&&r.comments[c.id])||'';
+    const sep=ci>0?'border-left:2px solid #e8e7e0;':'';
+    const fh=f.l?`<div class="file-wrap"><a class="file-link" href="${f.u}" target="_blank">${FILE_SVG}${f.l}</a><button class="btn-file" onclick="openFile(${ri},'${c.id}')">Modifier</button></div>`:`<button class="btn-file" onclick="openFile(${ri},'${c.id}')">+ Fichier</button>`;
+    cells+=`<td style="${sep}"><span class="badge badge-${s}" onclick="toggleStatus(${ri},'${c.id}')">${LABELS[s]}</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(${ri},'${c.id}',this.value)" oninput="autoResize(this)">${comment}</textarea></td><td>${fh}</td>`;
+  });
+  cells+=`<td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:${p}%"></div></div><div class="pct-label">${p}%</div></div></td><td><button class="btn-del-row" onclick="delRow(${ri})">✕</button></td>`;
+  const tr=document.createElement('tr');tr.innerHTML=cells;return tr;
+}
+
 function renderBody(){
   const tbody=document.getElementById('tbody');tbody.innerHTML='';
+  const old=document.getElementById('done-tbody');if(old)old.remove();
+
+  const active=[],done=[];
   state.rows.forEach((r,ri)=>{
     if(filter!=='all'&&rowStatus(r)!==filter)return;
-    const p=pct(r);
-    const allL=langs.includes(r.lang)?langs:[...langs,r.lang];
-    const opts=allL.map(l=>`<option${l===r.lang?' selected':''}>${l}</option>`).join('');
-    let cells=`<td style="white-space:nowrap">
-      <span class="row-drag-handle" draggable="true" ondragstart="rowDS(event,${ri})" ondragover="rowDO(event,${ri})" ondragleave="rowDL(event)" ondrop="rowDrop(event,${ri})" ondragend="rowDE()">⠿</span>
-      <span class="prog-name" contenteditable="true" onblur="updateName(${ri},this.textContent.trim())">${r.name}</span>
-      <div class="lang-wrap"><select class="lang-select" onchange="updateLang(${ri},this.value)">${opts}</select><button class="btn-lang-mgr" onclick="openLangs(${ri})">⚙️</button></div>
-    </td>`;
-    state.cols.forEach((c,ci)=>{
-      const s=r.stages[c.id]||'todo';const f=r.files[c.id]||{l:'',u:''};
-      const sep=ci>0?'border-left:2px solid #e8e7e0;':'';
-      const comment = (r.comments && r.comments[c.id]) || '';
-      const fh=f.l?`<div class="file-wrap"><a class="file-link" href="${f.u}" target="_blank">${FILE_SVG}${f.l}</a><button class="btn-file" onclick="openFile(${ri},'${c.id}')">Modifier</button></div>`:`<button class="btn-file" onclick="openFile(${ri},'${c.id}')">+ Fichier</button>`;
-      cells+=`<td style="${sep}"><span class="badge badge-${s}" onclick="toggleStatus(${ri},'${c.id}')">${LABELS[s]}</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(${ri},'${c.id}',this.value)" oninput="autoResize(this)">${comment}</textarea></td><td>${fh}</td>`;
-    });
-    cells+=`<td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:${p}%"></div></div><div class="pct-label">${p}%</div></div></td><td><button class="btn-del-row" onclick="delRow(${ri})">✕</button></td>`;
-    const tr=document.createElement('tr');tr.innerHTML=cells;tbody.appendChild(tr);
+    pct(r)===100?done.push({r,ri}):active.push({r,ri});
   });
+
+  active.forEach(({r,ri})=>tbody.appendChild(buildRow(r,ri)));
+
+  if(done.length>0){
+    const toggleTr=document.createElement('tr');
+    toggleTr.innerHTML=`<td colspan="99" style="padding:0"><div class="done-toggle${doneOpen?' open':''}" id="done-toggle" onclick="toggleDone()"><span class="arrow">▶</span>&nbsp; ✅ ${done.length} programme${done.length>1?'s':''} terminé${done.length>1?'s':''} &nbsp;—&nbsp; cliquer pour ${doneOpen?'masquer':'afficher'}</div></td>`;
+    tbody.appendChild(toggleTr);
+    const doneTbody=document.createElement('tbody');
+    doneTbody.id='done-tbody';
+    doneTbody.className='done-section'+(doneOpen?' open':'');
+    done.forEach(({r,ri})=>doneTbody.appendChild(buildRow(r,ri)));
+    document.querySelector('table').appendChild(doneTbody);
+  }
 }
 
 function renderSummary(){
