@@ -136,7 +136,11 @@ td { padding: 10px 10px; vertical-align: middle; }
 
 <div class="card">
   <div class="table-wrap">
-    <table><thead id="thead"></thead><tbody id="tbody"></tbody></table>
+    <table><thead id="thead"></thead><tbody id="tbody"></tbody><tbody id="done-tbody" class="done-section open"><tr><td style="white-space:nowrap">
+    <span class="row-drag-handle" draggable="true" ondragstart="rowDS(event,0)" ondragover="rowDO(event,0)" ondragleave="rowDL(event)" ondrop="rowDrop(event,0)" ondragend="rowDE()">⠿</span>
+    <span class="prog-name" contenteditable="true" onblur="updateName(0,this.textContent.trim())">Jean Michel Gurret - Programme</span>
+    <div class="lang-wrap"><select class="lang-select" onchange="updateLang(0,this.value)"><option selected="">EN→FR</option><option>EN→ES</option><option>EN→DE</option><option>EN→IT</option><option>EN→PL</option><option>FR→EN</option></select><button class="btn-lang-mgr" onclick="openLangs(0)">⚙️</button></div>
+  </td><td style=""><span class="badge badge-done" onclick="toggleStatus(0,'c1')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(0,'c1',this.value)" oninput="autoResize(this)"></textarea></td><td><button class="btn-file" onclick="openFile(0,'c1')">+ Fichier</button></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(0,'c2')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(0,'c2',this.value)" oninput="autoResize(this)"></textarea></td><td><button class="btn-file" onclick="openFile(0,'c2')">+ Fichier</button></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(0,'c3')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(0,'c3',this.value)" oninput="autoResize(this)"></textarea></td><td><button class="btn-file" onclick="openFile(0,'c3')">+ Fichier</button></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(0,'c4')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(0,'c4',this.value)" oninput="autoResize(this)"></textarea></td><td><button class="btn-file" onclick="openFile(0,'c4')">+ Fichier</button></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(0,'c5')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(0,'c5',this.value)" oninput="autoResize(this)"></textarea></td><td><button class="btn-file" onclick="openFile(0,'c5')">+ Fichier</button></td><td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div><div class="pct-label">100%</div></div></td><td><button class="btn-del-row" onclick="delRow(0)">✕</button></td></tr></tbody></table>
   </div>
   <div class="summary" id="summary"></div>
 </div>
@@ -144,7 +148,7 @@ td { padding: 10px 10px; vertical-align: middle; }
 <div class="modal-bg" id="m-file"><div class="modal"><h3>Modifier le fichier</h3><label>Nom du fichier</label><input type="text" id="mf-name" placeholder="Slides_v1.pptx"><label>Lien (URL)</label><input type="text" id="mf-url" placeholder="https://drive.google.com/..."><div class="modal-actions"><button class="btn" onclick="closeM('m-file')">Annuler</button><button class="btn btn-primary" onclick="saveFile()">Enregistrer</button></div></div></div>
 <div class="modal-bg" id="m-col"><div class="modal"><h3>Ajouter une colonne</h3><label>Nom</label><input type="text" id="mc-name" placeholder="ex: Validation client"><label>Icône</label><div class="emoji-row" id="mc-emoji"></div><label>Couleur</label><div class="color-row" id="mc-color"></div><div class="modal-actions"><button class="btn" onclick="closeM('m-col')">Annuler</button><button class="btn btn-primary" onclick="saveCol()">Ajouter</button></div></div></div>
 <div class="modal-bg" id="m-rename"><div class="modal"><h3>Renommer la colonne</h3><label>Nouveau nom</label><input type="text" id="mr-name"><div class="modal-actions"><button class="btn" onclick="closeM('m-rename')">Annuler</button><button class="btn btn-primary" onclick="saveRename()">Enregistrer</button></div></div></div>
-<div class="modal-bg" id="m-lang"><div class="modal"><h3>Gérer les langues</h3><div class="lang-list" id="ml-list"></div><div class="lang-add-row"><input type="text" id="ml-src" placeholder="FR" maxlength="5"><span style="color:#a0a099;font-weight:700">→</span><input type="text" id="ml-dst" placeholder="DE" maxlength="5"><button class="btn btn-primary" style="flex:1" onclick="addLang()">Ajouter</button></div><div class="modal-actions"><button class="btn" onclick="closeM('m-lang')">Fermer</button></div></div></div>
+<div class="modal-bg" id="m-lang"><div class="modal"><h3>Gérer les langues</h3><div class="lang-list" id="ml-list"><div class="lang-item"><span style="font-size:13px">EN→FR</span><button onclick="deleteLang('EN→FR')" style="font-size:11px;background:none;border:none;cursor:pointer;color:#c0bfb8;padding:2px 6px;border-radius:4px" onmouseover="this.style.color='#b83220';this.style.background='#fde0de'" onmouseout="this.style.color='#c0bfb8';this.style.background='none'">✕</button></div><div class="lang-item"><span style="font-size:13px">EN→ES</span><button onclick="deleteLang('EN→ES')" style="font-size:11px;background:none;border:none;cursor:pointer;color:#c0bfb8;padding:2px 6px;border-radius:4px" onmouseover="this.style.color='#b83220';this.style.background='#fde0de'" onmouseout="this.style.color='#c0bfb8';this.style.background='none'">✕</button></div><div class="lang-item"><span style="font-size:13px">EN→DE</span><button onclick="deleteLang('EN→DE')" style="font-size:11px;background:none;border:none;cursor:pointer;color:#c0bfb8;padding:2px 6px;border-radius:4px" onmouseover="this.style.color='#b83220';this.style.background='#fde0de'" onmouseout="this.style.color='#c0bfb8';this.style.background='none'">✕</button></div><div class="lang-item"><span style="font-size:13px">EN→IT</span><button onclick="deleteLang('EN→IT')" style="font-size:11px;background:none;border:none;cursor:pointer;color:#c0bfb8;padding:2px 6px;border-radius:4px" onmouseover="this.style.color='#b83220';this.style.background='#fde0de'" onmouseout="this.style.color='#c0bfb8';this.style.background='none'">✕</button></div><div class="lang-item"><span style="font-size:13px">EN→PL</span><button onclick="deleteLang('EN→PL')" style="font-size:11px;background:none;border:none;cursor:pointer;color:#c0bfb8;padding:2px 6px;border-radius:4px" onmouseover="this.style.color='#b83220';this.style.background='#fde0de'" onmouseout="this.style.color='#c0bfb8';this.style.background='none'">✕</button></div><div class="lang-item"><span style="font-size:13px">FR→EN</span><button onclick="deleteLang('FR→EN')" style="font-size:11px;background:none;border:none;cursor:pointer;color:#c0bfb8;padding:2px 6px;border-radius:4px" onmouseover="this.style.color='#b83220';this.style.background='#fde0de'" onmouseout="this.style.color='#c0bfb8';this.style.background='none'">✕</button></div></div><div class="lang-add-row"><input type="text" id="ml-src" placeholder="FR" maxlength="5"><span style="color:#a0a099;font-weight:700">→</span><input type="text" id="ml-dst" placeholder="DE" maxlength="5"><button class="btn btn-primary" style="flex:1" onclick="addLang()">Ajouter</button></div><div class="modal-actions"><button class="btn" onclick="closeM('m-lang')">Fermer</button></div></div></div>
 
 <script id="main-script">
 const STATUSES=['todo','inprogress','done','blocked'];
@@ -156,7 +160,7 @@ const FILE_SVG=`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strok
 const SK='sf_state', LK='sf_langs', VK='sf_version';
 
 // ── DONNÉES (mises à jour à chaque export) ───────────────────
-const DATA_VERSION='v1780045738982';
+const DATA_VERSION='v1780470762422';
 const IMPORTED={
   "cols": [
     {
@@ -232,7 +236,7 @@ const IMPORTED={
         "c2": "done",
         "c3": "done",
         "c4": "done",
-        "c5": "todo"
+        "c5": "inprogress"
       },
       "files": {
         "c1": {
@@ -255,6 +259,9 @@ const IMPORTED={
           "l": "Générique",
           "u": "https://www.canva.com/design/DAHG1XhYpVQ/yUIFwlzWT9sx8BDFzHTM5Q/edit"
         }
+      },
+      "comments": {
+        "c5": "Vidéos à faire avec générique"
       }
     },
     {
@@ -265,7 +272,7 @@ const IMPORTED={
         "c2": "done",
         "c3": "inprogress",
         "c4": "done",
-        "c5": "blocked"
+        "c5": "inprogress"
       },
       "files": {
         "c1": {
@@ -288,6 +295,10 @@ const IMPORTED={
           "l": "",
           "u": ""
         }
+      },
+      "comments": {
+        "c3": "Révison AGP (semaine du 03 juin)",
+        "c5": ""
       }
     },
     {
@@ -321,6 +332,10 @@ const IMPORTED={
           "l": "",
           "u": ""
         }
+      },
+      "comments": {
+        "c3": "en révision PLM",
+        "c4": "Studio en cours"
       }
     },
     {
@@ -354,6 +369,115 @@ const IMPORTED={
           "l": "",
           "u": ""
         }
+      },
+      "comments": {
+        "c3": "en Révision PLM"
+      }
+    },
+    {
+      "name": "HeartMath - Cohérence Cardiaque",
+      "lang": "EN→FR",
+      "stages": {
+        "c1": "done",
+        "c2": "done",
+        "c3": "todo",
+        "c4": "todo",
+        "c5": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "Slides FR",
+          "u": "https://www.dropbox.com/scl/fo/djqnwkrrhqv0cojqlq99n/ADxmzl-nAAtpO5o1oxnxJtQ?rlkey=yqc28l540n2f8yfeu744z5bss&st=phhqygtm&dl=0"
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        }
+      },
+      "comments": {
+        "c2": "OK par Pascale"
+      }
+    },
+    {
+      "name": "The Resilient Heart - Heart Math",
+      "lang": "EN→FR",
+      "stages": {
+        "c1": "done",
+        "c2": "done",
+        "c3": "done",
+        "c4": "todo",
+        "c5": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "Slides FR",
+          "u": "https://www.dropbox.com/scl/fo/2jetpuqkm1rh1oiyuze7q/AO7vT_B2F9Oz6MXh6kEFE6A?rlkey=2qc4gmfqvcsdsktvj3l5wu9tx&st=k5ryp8nn&dl=0"
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        }
+      }
+    },
+    {
+      "name": "Ruth Lanius",
+      "lang": "EN→FR",
+      "stages": {
+        "c1": "done",
+        "c2": "done",
+        "c3": "todo",
+        "c4": "inprogress",
+        "c5": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "",
+          "u": ""
+        },
+        "c4": {
+          "l": "",
+          "u": ""
+        },
+        "c5": {
+          "l": "",
+          "u": ""
+        }
+      },
+      "comments": {
+        "c2": "trad par Fleur",
+        "c4": "Anne Laure pour le 15-06"
       }
     },
     {
@@ -387,6 +511,9 @@ const IMPORTED={
           "l": "",
           "u": ""
         }
+      },
+      "comments": {
+        "c3": "Slides en cours de MEP - Lauréna"
       }
     },
     {
@@ -489,139 +616,7 @@ const IMPORTED={
       }
     },
     {
-      "name": "HeartMath - Cohérence Cardiaque",
-      "lang": "EN→FR",
-      "stages": {
-        "c1": "done",
-        "c2": "inprogress",
-        "c3": "todo",
-        "c4": "todo",
-        "c5": "todo"
-      },
-      "files": {
-        "c1": {
-          "l": "",
-          "u": ""
-        },
-        "c2": {
-          "l": "",
-          "u": ""
-        },
-        "c3": {
-          "l": "",
-          "u": ""
-        },
-        "c4": {
-          "l": "",
-          "u": ""
-        },
-        "c5": {
-          "l": "",
-          "u": ""
-        }
-      }
-    },
-    {
-      "name": "The Resilient Heart - Heart Math",
-      "lang": "EN→FR",
-      "stages": {
-        "c1": "done",
-        "c2": "done",
-        "c3": "done",
-        "c4": "todo",
-        "c5": "todo"
-      },
-      "files": {
-        "c1": {
-          "l": "",
-          "u": ""
-        },
-        "c2": {
-          "l": "",
-          "u": ""
-        },
-        "c3": {
-          "l": "Slides FR",
-          "u": "https://www.dropbox.com/scl/fo/2jetpuqkm1rh1oiyuze7q/AO7vT_B2F9Oz6MXh6kEFE6A?rlkey=2qc4gmfqvcsdsktvj3l5wu9tx&st=k5ryp8nn&dl=0"
-        },
-        "c4": {
-          "l": "",
-          "u": ""
-        },
-        "c5": {
-          "l": "",
-          "u": ""
-        }
-      }
-    },
-    {
-      "name": "Ruth Lanius",
-      "lang": "EN→FR",
-      "stages": {
-        "c1": "done",
-        "c2": "inprogress",
-        "c3": "todo",
-        "c4": "todo",
-        "c5": "todo"
-      },
-      "files": {
-        "c1": {
-          "l": "",
-          "u": ""
-        },
-        "c2": {
-          "l": "",
-          "u": ""
-        },
-        "c3": {
-          "l": "",
-          "u": ""
-        },
-        "c4": {
-          "l": "",
-          "u": ""
-        },
-        "c5": {
-          "l": "",
-          "u": ""
-        }
-      }
-    },
-    {
       "name": "SPI Programme",
-      "lang": "EN→FR",
-      "stages": {
-        "c1": "inprogress",
-        "c2": "todo",
-        "c3": "todo",
-        "c4": "todo",
-        "c5": "todo"
-      },
-      "files": {
-        "c1": {
-          "l": "",
-          "u": ""
-        },
-        "c2": {
-          "l": "",
-          "u": ""
-        },
-        "c3": {
-          "l": "",
-          "u": ""
-        },
-        "c4": {
-          "l": "",
-          "u": ""
-        },
-        "c5": {
-          "l": "",
-          "u": ""
-        }
-      }
-    },
-    {
-      "name": "Jean Michel Gurret",
       "lang": "EN→FR",
       "stages": {
         "c1": "inprogress",
@@ -1056,5 +1051,6 @@ render();
 
 
 <span id="PING_CONTENT_DLS_POPUP" style="display: none;"></span><div style="background-color: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; bottom: 15px; display: block; margin: 0px; opacity: 1; padding: 0px; position: fixed; right: 15px; z-index: 2147483647;"></div>
-</body>
+
+<span id="PING_CONTENT_DLS_POPUP" style="display: none;"></span><div style="background-color: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; bottom: 15px; display: block; margin: 0px; opacity: 1; padding: 0px; position: fixed; right: 15px; z-index: 2147483647;"></div></body>
 </html>
