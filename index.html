@@ -136,7 +136,7 @@ td { padding: 10px 10px; vertical-align: middle; }
 
 <div class="card">
   <div class="table-wrap">
-    <table><thead id="thead"></thead><tbody id="tbody"></tbody><tbody id="done-tbody" class="done-section"><tr><td style="white-space:nowrap">
+    <table><thead id="thead"></thead><tbody id="tbody"></tbody><tbody id="done-tbody" class="done-section open"><tr><td style="white-space:nowrap">
     <span class="row-drag-handle" draggable="true" ondragstart="rowDS(event,0)" ondragover="rowDO(event,0)" ondragleave="rowDL(event)" ondrop="rowDrop(event,0)" ondragend="rowDE()">⠿</span>
     <span class="prog-name" contenteditable="true" onblur="updateName(0,this.textContent.trim())">Jean Michel Gurret - Programme</span>
     <div class="lang-wrap"><select class="lang-select" onchange="updateLang(0,this.value)"><option selected="">EN→FR</option><option>EN→ES</option><option>EN→DE</option><option>EN→IT</option><option>EN→PL</option><option>FR→EN</option></select><button class="btn-lang-mgr" onclick="openLangs(0)">⚙️</button></div>
@@ -176,7 +176,7 @@ const FILE_SVG=`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strok
 const SK='sf_state', LK='sf_langs', VK='sf_version';
 
 // ── DONNÉES (mises à jour à chaque export) ───────────────────
-const DATA_VERSION='v1784971063064';
+const DATA_VERSION='v1785160644924';
 const IMPORTED={
   "cols": [
     {
@@ -380,8 +380,8 @@ const IMPORTED={
           "u": "https://www.dropbox.com/scl/fo/hn7qntx24o2dzrhw9kys0/AA3_qZaR27Z-8eHKeZr8jsI?rlkey=ml0u3hbc0z8qi1j13j7vo14dq&st=ftqc82wt&dl=0"
         },
         "c5": {
-          "l": "",
-          "u": ""
+          "l": "Générique",
+          "u": "https://www.canva.com/design/DAGXjMYcsfA/64uq3OD4r7xRcrI5goXcHw/edit"
         }
       },
       "comments": {
@@ -422,7 +422,7 @@ const IMPORTED={
       },
       "comments": {
         "c3": "",
-        "c5": ""
+        "c5": "Générique en cours de création"
       }
     },
     {
@@ -497,7 +497,7 @@ const IMPORTED={
       "comments": {
         "c2": "trad par Fleur",
         "c4": "",
-        "c3": "a faire d'ici aout - objectif aout"
+        "c3": "MEP en cours"
       }
     },
     {
@@ -1132,6 +1132,7 @@ render();
 
 <span id="PING_CONTENT_DLS_POPUP" style="display: none;"></span><div style="background-color: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; bottom: 15px; display: block; margin: 0px; opacity: 1; padding: 0px; position: fixed; right: 15px; z-index: 2147483647;"></div>
 <span id="PING_CONTENT_DLS_POPUP" style="display: none;"></span><div style="background-color: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; bottom: 15px; display: block; margin: 0px; opacity: 1; padding: 0px; position: fixed; right: 15px; z-index: 2147483647;"></div>
+
 
 
 </body>
