@@ -136,7 +136,7 @@ td { padding: 10px 10px; vertical-align: middle; }
 
 <div class="card">
   <div class="table-wrap">
-    <table><thead id="thead"></thead><tbody id="tbody"></tbody><tbody id="done-tbody" class="done-section open"><tr><td style="white-space:nowrap">
+    <table><thead id="thead"></thead><tbody id="tbody"></tbody><tbody id="done-tbody" class="done-section"><tr><td style="white-space:nowrap">
     <span class="row-drag-handle" draggable="true" ondragstart="rowDS(event,0)" ondragover="rowDO(event,0)" ondragleave="rowDL(event)" ondrop="rowDrop(event,0)" ondragend="rowDE()">⠿</span>
     <span class="prog-name" contenteditable="true" onblur="updateName(0,this.textContent.trim())">Jean Michel Gurret - Programme</span>
     <div class="lang-wrap"><select class="lang-select" onchange="updateLang(0,this.value)"><option selected="">EN→FR</option><option>EN→ES</option><option>EN→DE</option><option>EN→IT</option><option>EN→PL</option><option>FR→EN</option></select><button class="btn-lang-mgr" onclick="openLangs(0)">⚙️</button></div>
@@ -153,10 +153,10 @@ td { padding: 10px 10px; vertical-align: middle; }
     <span class="prog-name" contenteditable="true" onblur="updateName(3,this.textContent.trim())">Pat Ogden - PL</span>
     <div class="lang-wrap"><select class="lang-select" onchange="updateLang(3,this.value)"><option>EN→FR</option><option>EN→ES</option><option>EN→DE</option><option>EN→IT</option><option selected="">EN→PL</option><option>FR→EN</option></select><button class="btn-lang-mgr" onclick="openLangs(3)">⚙️</button></div>
   </td><td style=""><span class="badge badge-done" onclick="toggleStatus(3,'c1')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(3,'c1',this.value)" oninput="autoResize(this)"></textarea></td><td><button class="btn-file" onclick="openFile(3,'c1')">+ Fichier</button></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(3,'c2')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(3,'c2',this.value)" oninput="autoResize(this)"></textarea></td><td><button class="btn-file" onclick="openFile(3,'c2')">+ Fichier</button></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(3,'c3')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(3,'c3',this.value)" oninput="autoResize(this)"></textarea></td><td><div class="file-wrap"><a class="file-link" href="https://www.dropbox.com/scl/fo/htgwnrfnfmvxku2vhjd1j/ABVpvMFzthgoWWBmz4rl7GE?rlkey=l4mvq4hez0rnah23txr8gxoro&amp;st=mulxelo3&amp;dl=0" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"></path><polyline points="9 2 9 6 13 6"></polyline></svg>Slides PL</a><button class="btn-file" onclick="openFile(3,'c3')">Modifier</button></div></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(3,'c4')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(3,'c4',this.value)" oninput="autoResize(this)"></textarea></td><td><div class="file-wrap"><a class="file-link" href="https://www.dropbox.com/scl/fo/2o98u09ol194084kb4lod/ADzgGlcXkx9B690-K949bqg?rlkey=ipjj6djawxnwmw9w6rlcc754o&amp;st=uxgemd9o&amp;dl=0" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"></path><polyline points="9 2 9 6 13 6"></polyline></svg>Fichiers audio PL</a><button class="btn-file" onclick="openFile(3,'c4')">Modifier</button></div></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(3,'c5')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(3,'c5',this.value)" oninput="autoResize(this)"></textarea></td><td><div class="file-wrap"><a class="file-link" href="https://www.canva.com/design/DAG_5DuuXa8/x5GulV2mUk8TygiduD5mXg/edit" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"></path><polyline points="9 2 9 6 13 6"></polyline></svg>générique</a><button class="btn-file" onclick="openFile(3,'c5')">Modifier</button></div></td><td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div><div class="pct-label">100%</div></div></td><td><button class="btn-del-row" onclick="delRow(3)">✕</button></td></tr><tr><td style="white-space:nowrap">
-    <span class="row-drag-handle" draggable="true" ondragstart="rowDS(event,6)" ondragover="rowDO(event,6)" ondragleave="rowDL(event)" ondrop="rowDrop(event,6)" ondragend="rowDE()">⠿</span>
-    <span class="prog-name" contenteditable="true" onblur="updateName(6,this.textContent.trim())">Bessel program</span>
-    <div class="lang-wrap"><select class="lang-select" onchange="updateLang(6,this.value)"><option selected="">EN→FR</option><option>EN→ES</option><option>EN→DE</option><option>EN→IT</option><option>EN→PL</option><option>FR→EN</option></select><button class="btn-lang-mgr" onclick="openLangs(6)">⚙️</button></div>
-  </td><td style=""><span class="badge badge-done" onclick="toggleStatus(6,'c1')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(6,'c1',this.value)" oninput="autoResize(this)"></textarea></td><td><button class="btn-file" onclick="openFile(6,'c1')">+ Fichier</button></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(6,'c2')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(6,'c2',this.value)" oninput="autoResize(this)"></textarea></td><td><button class="btn-file" onclick="openFile(6,'c2')">+ Fichier</button></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(6,'c3')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(6,'c3',this.value)" oninput="autoResize(this)">en révision PLM</textarea></td><td><div class="file-wrap"><a class="file-link" href="https://www.dropbox.com/scl/fo/xyg74u01f5axhe6pai4qv/AOBpFZy3ibpaB8YS9-R1foY?rlkey=p8w9joy5jy5rfwkpkb8lb8bmf&amp;st=cfk1dhk3&amp;dl=0" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"></path><polyline points="9 2 9 6 13 6"></polyline></svg>Slides FR</a><button class="btn-file" onclick="openFile(6,'c3')">Modifier</button></div></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(6,'c4')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(6,'c4',this.value)" oninput="autoResize(this)"></textarea></td><td><div class="file-wrap"><a class="file-link" href="https://www.dropbox.com/scl/fo/itwme6vp9hr7j5z0ce764/AK8oXaOYAMiRR7ioXcbqcxU?rlkey=3uy6wxcf3jqm56dxuyyf17mq5&amp;st=e4yokzvl&amp;dl=0" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"></path><polyline points="9 2 9 6 13 6"></polyline></svg>Fichiers audios</a><button class="btn-file" onclick="openFile(6,'c4')">Modifier</button></div></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(6,'c5')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(6,'c5',this.value)" oninput="autoResize(this)"></textarea></td><td><div class="file-wrap"><a class="file-link" href="https://www.canva.com/design/DAHMVyPp2Hc/gyuIB-OhuhZODVxvzIzeaw/edit" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"></path><polyline points="9 2 9 6 13 6"></polyline></svg>Générique</a><button class="btn-file" onclick="openFile(6,'c5')">Modifier</button></div></td><td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div><div class="pct-label">100%</div></div></td><td><button class="btn-del-row" onclick="delRow(6)">✕</button></td></tr></tbody></table>
+    <span class="row-drag-handle" draggable="true" ondragstart="rowDS(event,7)" ondragover="rowDO(event,7)" ondragleave="rowDL(event)" ondrop="rowDrop(event,7)" ondragend="rowDE()">⠿</span>
+    <span class="prog-name" contenteditable="true" onblur="updateName(7,this.textContent.trim())">Bessel program</span>
+    <div class="lang-wrap"><select class="lang-select" onchange="updateLang(7,this.value)"><option selected="">EN→FR</option><option>EN→ES</option><option>EN→DE</option><option>EN→IT</option><option>EN→PL</option><option>FR→EN</option></select><button class="btn-lang-mgr" onclick="openLangs(7)">⚙️</button></div>
+  </td><td style=""><span class="badge badge-done" onclick="toggleStatus(7,'c1')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(7,'c1',this.value)" oninput="autoResize(this)"></textarea></td><td><button class="btn-file" onclick="openFile(7,'c1')">+ Fichier</button></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(7,'c2')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(7,'c2',this.value)" oninput="autoResize(this)"></textarea></td><td><button class="btn-file" onclick="openFile(7,'c2')">+ Fichier</button></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(7,'c3')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(7,'c3',this.value)" oninput="autoResize(this)">en révision PLM</textarea></td><td><div class="file-wrap"><a class="file-link" href="https://www.dropbox.com/scl/fo/xyg74u01f5axhe6pai4qv/AOBpFZy3ibpaB8YS9-R1foY?rlkey=p8w9joy5jy5rfwkpkb8lb8bmf&amp;st=cfk1dhk3&amp;dl=0" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"></path><polyline points="9 2 9 6 13 6"></polyline></svg>Slides FR</a><button class="btn-file" onclick="openFile(7,'c3')">Modifier</button></div></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(7,'c4')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(7,'c4',this.value)" oninput="autoResize(this)"></textarea></td><td><div class="file-wrap"><a class="file-link" href="https://www.dropbox.com/scl/fo/itwme6vp9hr7j5z0ce764/AK8oXaOYAMiRR7ioXcbqcxU?rlkey=3uy6wxcf3jqm56dxuyyf17mq5&amp;st=e4yokzvl&amp;dl=0" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"></path><polyline points="9 2 9 6 13 6"></polyline></svg>Fichiers audios</a><button class="btn-file" onclick="openFile(7,'c4')">Modifier</button></div></td><td style="border-left:2px solid #e8e7e0;"><span class="badge badge-done" onclick="toggleStatus(7,'c5')">Terminé</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(7,'c5',this.value)" oninput="autoResize(this)"></textarea></td><td><div class="file-wrap"><a class="file-link" href="https://www.canva.com/design/DAHMVyPp2Hc/gyuIB-OhuhZODVxvzIzeaw/edit" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V6L9 2z"></path><polyline points="9 2 9 6 13 6"></polyline></svg>Générique</a><button class="btn-file" onclick="openFile(7,'c5')">Modifier</button></div></td><td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div><div class="pct-label">100%</div></div></td><td><button class="btn-del-row" onclick="delRow(7)">✕</button></td></tr></tbody></table>
   </div>
   <div class="summary" id="summary"></div>
 </div>
@@ -176,7 +176,7 @@ const FILE_SVG=`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strok
 const SK='sf_state', LK='sf_langs', VK='sf_version';
 
 // ── DONNÉES (mises à jour à chaque export) ───────────────────
-const DATA_VERSION='v1785160644924';
+const DATA_VERSION='v1786434971181';
 const IMPORTED={
   "cols": [
     {
@@ -389,6 +389,44 @@ const IMPORTED={
       }
     },
     {
+      "name": "Ruth Lanius",
+      "lang": "EN→FR",
+      "stages": {
+        "c1": "done",
+        "c2": "done",
+        "c3": "done",
+        "c4": "done",
+        "c5": "todo"
+      },
+      "files": {
+        "c1": {
+          "l": "",
+          "u": ""
+        },
+        "c2": {
+          "l": "",
+          "u": ""
+        },
+        "c3": {
+          "l": "Slides FR & EN",
+          "u": "https://www.dropbox.com/scl/fo/ytm7ac49rkhxktzugi3ix/AAJv6ogTj8GRYwUag0fFf80?rlkey=kex3w4abd27bapi50quioppch&st=ug2wvq7b&dl=0"
+        },
+        "c4": {
+          "l": "Fichiers audio FR",
+          "u": "https://www.dropbox.com/scl/fo/qvmathr4u8otjw77v8qba/AFwAL2BHGVcqTkSg_GiBKmo?rlkey=wydfun6ziozgoufhc1368eamk&st=9zo8b0s5&dl=0"
+        },
+        "c5": {
+          "l": "Générique (titre à ajouter)",
+          "u": "https://www.canva.com/design/DAHIz0X24mA/XYEFLd4jHphlJfqS-5cIZA/edit"
+        }
+      },
+      "comments": {
+        "c2": "trad par Fleur",
+        "c4": "",
+        "c3": ""
+      }
+    },
+    {
       "name": "Janina Fisher - Nouveau programme",
       "lang": "EN→FR",
       "stages": {
@@ -416,13 +454,13 @@ const IMPORTED={
           "u": "https://www.dropbox.com/scl/fo/bgk8nv9sa0lhl6b4n3dsg/AIsoi9JE4slynEaH0PjOQOs?rlkey=c9ps910l7hlaq71aft2ec35mh&st=hog5xav4&dl=0"
         },
         "c5": {
-          "l": "",
-          "u": ""
+          "l": "Générique (titre à ajouter)",
+          "u": "https://www.canva.com/design/DAHQwS_pmjw/zV35d-CABts4ZpB8ulXxqQ/edit"
         }
       },
       "comments": {
         "c3": "",
-        "c5": "Générique en cours de création"
+        "c5": ""
       }
     },
     {
@@ -460,44 +498,6 @@ const IMPORTED={
       "comments": {
         "c3": "en révision PLM",
         "c4": ""
-      }
-    },
-    {
-      "name": "Ruth Lanius",
-      "lang": "EN→FR",
-      "stages": {
-        "c1": "done",
-        "c2": "done",
-        "c3": "inprogress",
-        "c4": "done",
-        "c5": "todo"
-      },
-      "files": {
-        "c1": {
-          "l": "",
-          "u": ""
-        },
-        "c2": {
-          "l": "",
-          "u": ""
-        },
-        "c3": {
-          "l": "",
-          "u": ""
-        },
-        "c4": {
-          "l": "Fichiers audio FR",
-          "u": "https://www.dropbox.com/scl/fo/qvmathr4u8otjw77v8qba/AFwAL2BHGVcqTkSg_GiBKmo?rlkey=wydfun6ziozgoufhc1368eamk&st=9zo8b0s5&dl=0"
-        },
-        "c5": {
-          "l": "",
-          "u": ""
-        }
-      },
-      "comments": {
-        "c2": "trad par Fleur",
-        "c4": "",
-        "c3": "MEP en cours"
       }
     },
     {
@@ -1132,6 +1132,7 @@ render();
 
 <span id="PING_CONTENT_DLS_POPUP" style="display: none;"></span><div style="background-color: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; bottom: 15px; display: block; margin: 0px; opacity: 1; padding: 0px; position: fixed; right: 15px; z-index: 2147483647;"></div>
 <span id="PING_CONTENT_DLS_POPUP" style="display: none;"></span><div style="background-color: transparent; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; bottom: 15px; display: block; margin: 0px; opacity: 1; padding: 0px; position: fixed; right: 15px; z-index: 2147483647;"></div>
+
 
 
 
