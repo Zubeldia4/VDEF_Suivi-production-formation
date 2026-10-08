@@ -109,6 +109,16 @@ td { padding: 10px 10px; vertical-align: middle; }
 .lang-add-row { display: flex; align-items: center; gap: 6px; background: #f5f5f0; border-radius: 8px; padding: 10px; }
 .lang-add-row input { width: 56px; text-align: center; padding: 6px 4px; border: 1px solid #d0cfc6; border-radius: 6px; font-size: 13px; outline: none; text-transform: uppercase; }
 .lang-add-row input:focus { border-color: #93b4f5; }
+.mkt-cell { min-width: 120px; }
+.mkt-date-input { font-size: 11px; background: none; border: none; border-bottom: 1px dashed #c4b5fd; outline: none; color: #1a1a18; width: 100%; font-family: inherit; padding: 2px 2px 1px; cursor: text; }
+.mkt-date-input:focus { border-bottom-color: #7c3aed; background: #faf5ff; border-radius: 3px 3px 0 0; }
+.mkt-date-input::placeholder { color: #d0cfc6; font-style: italic; }
+.mkt-date-input.empty { color: #c0bfb8; }
+.badge-mkt-confirmed { background: #d4f0e2; color: #1a6640; border: 1px solid #b4e0c8; cursor: pointer; margin-top: 4px; }
+.badge-mkt-confirmed:hover { background: #c0e8d4; }
+.badge-mkt-provisional { background: #faf5ff; color: #6d28d9; border: 1px solid #ddd6fe; cursor: pointer; margin-top: 4px; }
+.badge-mkt-provisional:hover { background: #f3e8ff; }
+.mkt-head { background: #faf5ff; }
 </style>
 </head>
 <body>
@@ -1110,6 +1120,7 @@ function renderHead(){
       <div class="col-actions"><button class="col-btn" onclick="openRename('${c.id}')">✏️</button><button class="col-btn" onclick="delCol('${c.id}')">✕</button></div>
     </th>`;
   });
+  h1+=`<th rowspan="2" class="col-group-head mkt-head" style="border-left:2px solid #e8e7e0;vertical-align:middle;padding:8px 10px;white-space:nowrap;min-width:120px">📅 Date lancement<br><span style="font-size:9px;font-weight:400;color:#9370db;text-transform:none;letter-spacing:0">Cliquer pour changer le type</span></th>`;
   h1+=`<th rowspan="2" style="vertical-align:bottom;padding:12px 10px 9px;text-align:center;border-bottom:2px solid #e8e7e0">%</th><th rowspan="2" style="padding:4px;border-bottom:2px solid #e8e7e0"></th></tr>`;
   let h2='<tr>';
   state.cols.forEach((c,ci)=>{const sep=ci>0?'border-left:2px solid #e8e7e0;':'';h2+=`<th class="sub-head" style="background:${c.color};${sep}">Statut</th><th class="sub-head sub-head-file" style="background:${c.color}">Fichier</th>`;});
@@ -1142,6 +1153,12 @@ function buildRow(r,ri){
     const fh=f.l?`<div class="file-wrap"><a class="file-link" href="${f.u}" target="_blank">${FILE_SVG}${f.l}</a><button class="btn-file" onclick="openFile(${ri},'${c.id}')">Modifier</button></div>`:`<button class="btn-file" onclick="openFile(${ri},'${c.id}')">+ Fichier</button>`;
     cells+=`<td style="${sep}"><span class="badge badge-${s}" onclick="toggleStatus(${ri},'${c.id}')">${LABELS[s]}</span><textarea class="cell-comment" rows="1" placeholder="commentaire…" onblur="updateComment(${ri},'${c.id}',this.value)" oninput="autoResize(this)">${comment}</textarea></td><td>${fh}</td>`;
   });
+  const mktDate=r.mktDate||'';
+  const mktType=r.mktType||'provisional';
+  const mktBadge=mktType==='confirmed'
+    ?`<span class="badge badge-mkt-confirmed" onclick="toggleMktType(${ri})" title="Cliquer pour passer en prévisionnelle">✅ Confirmée</span>`
+    :`<span class="badge badge-mkt-provisional" onclick="toggleMktType(${ri})" title="Cliquer pour passer en confirmée">🔮 Prévisionnelle</span>`;
+  cells+=`<td class="mkt-cell" style="border-left:2px solid #e8e7e0;vertical-align:middle"><input class="mkt-date-input${mktDate?'':' empty'}" type="text" value="${mktDate}" placeholder="jj/mm/aaaa ou jan 2026" oninput="this.classList.toggle('empty',!this.value)" onblur="updateMktDate(${ri},this.value)">${mktBadge}</td>`;
   cells+=`<td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:${p}%"></div></div><div class="pct-label">${p}%</div></div></td><td><button class="btn-del-row" onclick="delRow(${ri})">✕</button></td>`;
   const tr=document.createElement('tr');tr.innerHTML=cells;return tr;
 }
@@ -1197,8 +1214,10 @@ function toggleStatus(ri,cid){const cur=state.rows[ri].stages[cid]||'todo';state
 function updateName(ri,v){state.rows[ri].name=v;save();renderSummary();}
 function updateLang(ri,v){state.rows[ri].lang=v;save();}
 function updateComment(ri,cid,v){if(!state.rows[ri].comments)state.rows[ri].comments={};state.rows[ri].comments[cid]=v.trim();save();}
+function updateMktDate(ri,v){state.rows[ri].mktDate=v.trim();save();}
+function toggleMktType(ri){state.rows[ri].mktType=(state.rows[ri].mktType||'provisional')==='provisional'?'confirmed':'provisional';save();render();}
 function autoResize(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
-function addRow(){const s={},f={},cm={};state.cols.forEach(c=>{s[c.id]='todo';f[c.id]={l:'',u:''};cm[c.id]='';});state.rows.push({name:'Nouveau programme',lang:langs[0]||'EN→FR',stages:s,files:f,comments:cm});save();render();}
+function addRow(){const s={},f={},cm={};state.cols.forEach(c=>{s[c.id]='todo';f[c.id]={l:'',u:''};cm[c.id]='';});state.rows.push({name:'Nouveau programme',lang:langs[0]||'EN→FR',stages:s,files:f,comments:cm,mktDate:'',mktType:'provisional'});save();render();}
 function delRow(ri){if(confirm(`Supprimer "${state.rows[ri].name}" ?`)){state.rows.splice(ri,1);save();render();}}
 function delCol(cid){const col=state.cols.find(c=>c.id===cid);if(confirm(`Supprimer "${col?.label}" ?`)){state.cols=state.cols.filter(c=>c.id!==cid);state.rows.forEach(r=>{delete r.stages[cid];delete r.files[cid];});save();render();}}
 function setFilter(f,btn){filter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
